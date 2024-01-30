@@ -1,0 +1,3 @@
+[submodule "XeSharp"]
+	path = XeSharp
+	url = https://github.com/hyperbx/XeSharp.git
