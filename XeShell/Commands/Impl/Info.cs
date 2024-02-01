@@ -26,5 +26,10 @@ namespace XeShell.Commands.Impl
 
             Console.WriteLine(node.GetInfo());
         }
+
+        public bool ExecuteRaw(string[] in_args, XeDbgConsole in_console)
+        {
+            return false;
+        }
     }
 }

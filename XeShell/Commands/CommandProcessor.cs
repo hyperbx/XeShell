@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using XeSharp.Device;
 using XeSharp.Helpers;
-using XeSharp.Net.Sockets;
+using XeShell.Exceptions;
 
 // https://github.com/thesupersonic16/HedgeModManager/blob/rewrite/HedgeModManager/CLI/CommandLine.cs
 
@@ -34,16 +34,7 @@ namespace XeShell.Commands
             }
         }
 
-        public static List<Command> ParseArguments(string in_args, out bool out_isXeShellCommand)
-        {
-            var result = ParseArguments(StringHelper.ParseArgs(in_args), out bool _out_isXeShellCommand);
-
-            out_isXeShellCommand = _out_isXeShellCommand;
-
-            return result;
-        }
-
-        public static List<Command> ParseArguments(string[] in_args, out bool out_isXeShellCommand)
+        public static List<Command> ParseArguments(string[] in_args)
         {
             var commands = new List<Command>();
 
@@ -56,10 +47,7 @@ namespace XeShell.Commands
                     command = Commands.FirstOrDefault(x => x.Key.Alias == in_args[i]);
 
                     if (command.Key == null)
-                    {
-                        out_isXeShellCommand = false;
                         return commands;
-                    }
                 }
 
                 if (in_args.Length <= command.Key.Inputs?.Length + i)
@@ -102,9 +90,12 @@ namespace XeShell.Commands
                 commands.Add(new Command(in_args[0], command.Key, command.Value, inputs));
             }
 
-            out_isXeShellCommand = true;
-
             return commands;
+        }
+
+        public static List<Command> ParseArguments(string in_args)
+        {
+            return ParseArguments(StringHelper.ParseArgs(in_args));
         }
 
         public static object ParseDataFromString(TypeCode in_typeCode, string in_data)
@@ -112,19 +103,37 @@ namespace XeShell.Commands
 #pragma warning disable CS8603 // Possible null reference return.
             return in_typeCode switch
             {
-                TypeCode.String => in_data,
-                TypeCode.Int32 => in_data.StartsWith("0x") ? Convert.ToInt32(in_data, 16) : int.Parse(in_data),
-                TypeCode.UInt32 => in_data.StartsWith("0x") ? Convert.ToUInt32(in_data, 16) : uint.Parse(in_data),
+                TypeCode.String  => in_data,
+                TypeCode.Int32   => in_data.StartsWith("0x") ? Convert.ToInt32(in_data, 16) : int.Parse(in_data),
+                TypeCode.UInt32  => in_data.StartsWith("0x") ? Convert.ToUInt32(in_data, 16) : uint.Parse(in_data),
                 TypeCode.Boolean => bool.Parse(in_data),
-                _ => null,
+                _                => null,
             };
 #pragma warning restore CS8603 // Possible null reference return.
         }
 
-        public static void ExecuteArguments(List<Command> in_commands, XeDbgConsole in_console)
+        public static bool ExecuteArguments(string in_args, XeDbgConsole in_console)
         {
-            foreach (var command in in_commands)
-                (Activator.CreateInstance(command.Type) as ICommand)?.Execute(in_commands, command, in_console);
+            var result = false;
+            var args = StringHelper.ParseArgs(in_args);
+            var commands = ParseArguments(args);
+
+            foreach (var command in Commands)
+            {
+                if ((Activator.CreateInstance(command.Value) as ICommand)?.ExecuteRaw(args, in_console) == true)
+                    result = true;
+            }
+
+            if (commands.Count <= 0)
+                return result;
+
+            foreach (var command in commands)
+            {
+                (Activator.CreateInstance(command.Type) as ICommand)?.Execute(commands, command, in_console);
+                result = true;
+            }
+
+            return result;
         }
     }
 }

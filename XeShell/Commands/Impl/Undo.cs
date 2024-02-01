@@ -30,5 +30,10 @@ namespace XeShell.Commands.Impl
 
             MemoryHelper.PrintBytes(in_console.ReadBytes(addr, len), addr);
         }
+
+        public bool ExecuteRaw(string[] in_args, XeDbgConsole in_console)
+        {
+            return false;
+        }
     }
 }

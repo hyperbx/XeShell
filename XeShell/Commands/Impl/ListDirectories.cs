@@ -59,6 +59,11 @@ namespace XeShell.Commands.Impl
             Console.WriteLine($"\t       {dirCount} Dir(s)");
         }
 
+        public bool ExecuteRaw(string[] in_args, XeDbgConsole in_console)
+        {
+            return false;
+        }
+
         private static void PrintNavigationNodes(XeFileSystemNode in_node)
         {
             var fmt = $"{in_node.DateModified:dd/MM/yyyy  hh:mm tt}\t<DIR>          .";

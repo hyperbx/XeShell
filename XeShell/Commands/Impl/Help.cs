@@ -5,48 +5,53 @@ namespace XeShell.Commands.Impl
     [Command("help", "?")]
     public class Help : ICommand
     {
-        public void Execute(List<Command> in_commands, Command in_command, XeDbgConsole in_console)
-        {
-            static void PrintDefinitions(string in_category, Dictionary<string, (string Description, string Usage)> in_defs)
-            {
-                Console.WriteLine();
-                Console.WriteLine($"{in_category}:");
+		public void Execute(List<Command> in_commands, Command in_command, XeDbgConsole in_console)
+		{
+			static void PrintDefinitions(string in_category, Dictionary<string, (string Description, string Usage)> in_defs)
+			{
+				Console.WriteLine();
+				Console.WriteLine($"{in_category}:");
 
-                foreach (var entry in in_defs)
-                {
-                    Console.WriteLine($"{entry.Key}: {entry.Value.Description.Replace("\n", "\n        ")}");
+				foreach (var entry in in_defs)
+				{
+					Console.WriteLine($"{entry.Key}: {entry.Value.Description.Replace("\n", "\n        ")}");
 
 					if (string.IsNullOrEmpty(entry.Value.Usage))
 						continue;
 
 					Console.WriteLine($"    Usage: {entry.Value.Usage.Replace("\n", "\n           ")}");
-                }
-            }
+				}
+			}
 
-            PrintDefinitions("XeShell commands", _xeDefinitions);
-            PrintDefinitions("XBDM commands", _xbdmDefinitions);
+			PrintDefinitions("XeShell commands", _xeDefinitions);
+			PrintDefinitions("XBDM commands", _xbdmDefinitions);
 
 			if (in_console.Client.Info.IsFreebootXBDM)
-                PrintDefinitions("XBDM extended commands (speculatory)", _xbdmExDefinitions);
+				PrintDefinitions("XBDM extended commands (speculatory)", _xbdmExDefinitions);
+        }
+
+        public bool ExecuteRaw(string[] in_args, XeDbgConsole in_console)
+        {
+            return false;
         }
 
         private Dictionary<string, (string Description, string Usage)> _xeDefinitions = new()
-        {
-            { "cd/cd..",        ("Changes to the specified directory.", "cd [path]") },
-            { "cls",            ("Clear XeShell command prompt.", "") },
-            { "dir",            ("Lists the current or specified directory's contents.", "dir [opt: path]") },
-            { "help/?",         ("Displays help information.", "") },
-            { "info/info.",     ("Displays information about the connected console or specified filesystem node.", "info [opt: file/directory]") },
-            { "launch",         ("Launches the specified executable binary.", "launch [path]") },
-            { "peek",           ("Reads data from a memory address and prints it.", "peek [address] [opt: amount of bytes to read]") },
-            { "peekfile/peekf", ("Reads data from a file and prints it.", "peekfile [path] [opt: amount of bytes to read]") },
-            { "poke",           ("Writes data to a virtual address.", "poke [address] [opt: i8/u8/i16/u16/i32/u32/i64/u64/nop/string/wstring] [data]") },
-            { "scan",           ("Scans memory for data.", "scan [opt: i8/u8/i16/u16/i32/u32/i64/u64/string/wstring] [data] [opt: module name]") },
-            { "undo",           ("Undoes memory changes via the poke command (only works per session).", "undo [opt: address]") }
-        };
+		{
+			{ "cd/cd..",        ("Changes to the specified directory.", "cd [path]") },
+			{ "clear/cls",      ("Clear XeShell command prompt.", "") },
+			{ "dir",            ("Lists the current or specified directory's contents.", "dir [opt: path]") },
+			{ "help/?",         ("Displays help information.", "") },
+			{ "info/info.",     ("Displays information about the connected console or specified filesystem node.", "info [opt: file/directory]") },
+			{ "launch",         ("Launches the specified executable binary.", "launch [path]") },
+			{ "peek",           ("Reads data from a memory address and prints it.", "peek [address] [opt: amount of bytes to read]") },
+			{ "peekfile/peekf", ("Reads data from a file and prints it.", "peekfile [path] [opt: amount of bytes to read]") },
+			{ "poke",           ("Writes data to a virtual address.", "poke [address] [opt: i8/u8/i16/u16/i32/u32/i64/u64/nop/string/wstring] [data]") },
+			{ "scan",           ("Scans memory for data.", "scan [opt: i8/u8/i16/u16/i32/u32/i64/u64/string/wstring] [data] [opt: module name]") },
+			{ "undo",           ("Undoes memory changes via the poke command (only works per session).", "undo [opt: address]") }
+		};
 
-        private Dictionary<string, (string Description, string Usage)> _xbdmDefinitions = new()
-        {
+		private Dictionary<string, (string Description, string Usage)> _xbdmDefinitions = new()
+		{
 			{ "altaddr",           ("Gets the title ip address.", "") },
 			{ "break",             ("Manages breakpoints.", "") },
 			{ "bye",               ("Ends the connection.", "") },
@@ -106,14 +111,14 @@ namespace XeShell.Commands.Impl
 			{ "xbeinfo",           ("Gets information on the running executable.", "") },
 			{ "xexfield",          ("Gets an xex field.", "") },
 			{ "walkmem",           ("Lists memory and protection pages.", "") }
-        };
+		};
 
 		private Dictionary<string, (string Description, string Usage)> _xbdmExDefinitions = new()
-        {
-            { "hwinfo",      ("Does some listing of stuff for cOz.", "") },
-            { "khoungdm",    ("Throws a fatal error with code E69.", "") },
-            { "objlist",     ("Lists objects for cOz.", "") },
-            { "whomadethis", ("Responds with the author of Freeboot XBDM.", "") }
-        };
+		{
+			{ "hwinfo",      ("Does some listing of stuff for cOz.", "") },
+			{ "khoungdm",    ("Throws a fatal error with code E69.", "") },
+			{ "objlist",     ("Lists objects for cOz.", "") },
+			{ "whomadethis", ("Responds with the author of Freeboot XBDM.", "") }
+		};
     }
 }

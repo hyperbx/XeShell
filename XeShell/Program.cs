@@ -3,6 +3,7 @@ using XeSharp.Device;
 using XeSharp.Net.Sockets;
 using XeShell.Commands;
 using XeShell.Commands.Impl;
+using XeShell.Exceptions;
 
 namespace XeShell
 {
@@ -95,42 +96,46 @@ namespace XeShell
                keys (might require own implementation of the prompt). */
             var prompt = AnsiConsole.Prompt(new TextPrompt<string>($"{_console.FileSystem.CurrentDirectory}>"));
 
-            var xeCmds = CommandProcessor.ParseArguments(prompt, out bool out_isXeShellCommand);
-
-            if (xeCmds.Count > 0)
+            try
             {
                 // Intercept unimplemented XBDM commands with our own.
-                CommandProcessor.ExecuteArguments(xeCmds, _console);
-            }
-            else if (!out_isXeShellCommand)
-            {
-                var response = _client.SendCommand(prompt, false);
+                if (!CommandProcessor.ExecuteArguments(prompt, _console))
+                {
+                    var response = _client.SendCommand(prompt, false);
 
-                if (response == null || !_client.IsConnected())
-                {
-                    Console.WriteLine("Connection to the server has been lost...");
-                }
-                else
-                {
-                    if (response.Results?.Length > 0)
+                    if (response == null || !_client.IsConnected())
                     {
-                        foreach (var result in response.Results)
-                            Console.WriteLine(result);
+                        Console.WriteLine("Connection to the server has been lost...");
                     }
                     else
                     {
-                        bool isMessage = !string.IsNullOrEmpty(response.Message);
-
-                        if (response.Status.IsFailed())
+                        if (response.Results?.Length > 0)
                         {
-                            Console.WriteLine(isMessage ? response.Message : response.Status.ToString());
+                            foreach (var result in response.Results)
+                                Console.WriteLine(result);
                         }
-                        else if (isMessage)
+                        else
                         {
-                            Console.WriteLine(response.Message);
+                            bool isMessage = !string.IsNullOrEmpty(response.Message);
+
+                            if (response.Status.IsFailed())
+                            {
+                                if (response.Status.ToHResult() == XeSharp.Net.EXeDbgStatusCode.XBDM_INVALIDCMD)
+                                    throw new UnknownCommandException(prompt.Split(' ')[0]);
+
+                                Console.WriteLine(isMessage ? response.Message : response.Status.ToString());
+                            }
+                            else if (isMessage)
+                            {
+                                Console.WriteLine(response.Message);
+                            }
                         }
                     }
                 }
+            }
+            catch (UnknownCommandException out_ex)
+            {
+                Console.WriteLine(out_ex.Message);
             }
 
             // User disconnected gracefully.

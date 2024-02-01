@@ -2,12 +2,13 @@
 
 namespace XeShell.Commands.Impl
 {
-    [Command("clear", "cls")]
-    public class ClearScreen : ICommand
+    [Command("download", "dl", Inputs = [ typeof(string), typeof(string) ])]
+    public class Download : ICommand
     {
         public void Execute(List<Command> in_commands, Command in_command, XeDbgConsole in_console)
         {
-            Console.Clear();
+            var serverPath = (string)in_command.Inputs[0];
+            var localPath = (string)in_command.Inputs[1];
         }
 
         public bool ExecuteRaw(string[] in_args, XeDbgConsole in_console)

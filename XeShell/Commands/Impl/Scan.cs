@@ -45,10 +45,10 @@ namespace XeShell.Commands.Impl
                 case "u32":     pattern = MemoryHelper.StructureToByteArray(MemoryHelper.ChangeType<uint>(param2));   break;
                 case "i64":     pattern = MemoryHelper.StructureToByteArray(MemoryHelper.ChangeType<long>(param2));   break;
                 case "u64":     pattern = MemoryHelper.StructureToByteArray(MemoryHelper.ChangeType<ulong>(param2));  break;
-                case "f32":     pattern = MemoryHelper.StructureToByteArray(Convert.ToSingle(param2));                           break;
-                case "f64":     pattern = MemoryHelper.StructureToByteArray(Convert.ToDouble(param2));                           break;
-                case "string":  pattern = Encoding.UTF8.GetBytes(param2);                                                        break;
-                case "wstring": pattern = Encoding.BigEndianUnicode.GetBytes(param2);                                            break;
+                case "f32":     pattern = MemoryHelper.StructureToByteArray(Convert.ToSingle(param2));                break;
+                case "f64":     pattern = MemoryHelper.StructureToByteArray(Convert.ToDouble(param2));                break;
+                case "string":  pattern = Encoding.UTF8.GetBytes(param2);                                             break;
+                case "wstring": pattern = Encoding.BigEndianUnicode.GetBytes(param2);                                 break;
                 
                 default:
                     pattern = MemoryHelper.HexStringToByteArray(param1.Replace("?", "00"));
@@ -100,6 +100,11 @@ namespace XeShell.Commands.Impl
 
             foreach (var result in results)
                 Console.WriteLine($"- 0x{result:X}");
+        }
+
+        public bool ExecuteRaw(string[] in_args, XeDbgConsole in_console)
+        {
+            return false;
         }
     }
 }

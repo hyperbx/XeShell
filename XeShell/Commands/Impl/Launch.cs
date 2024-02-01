@@ -7,20 +7,20 @@ namespace XeShell.Commands.Impl
     {
         public void Execute(List<Command> in_commands, Command in_command, XeDbgConsole in_console)
         {
-            var path = (string)in_command.Inputs[0];
-            var file = in_console.FileSystem.GetNodeFromPath(path);
+            in_console.Launch((string)in_command.Inputs[0], string.Join(' ', in_command.Inputs.Skip(1)));
+        }
 
-            /* Checking the signature would be nice, so you can
-               at least use binaries that have renamed extensions,
-               but downloading that much data to check three bytes
-               is not worth it at all. */
-            if (Path.GetExtension(path) != ".xex")
-            {
-                Console.WriteLine("File must be executable.");
-                return;
-            }
+        public bool ExecuteRaw(string[] in_args, XeDbgConsole in_console)
+        {
+            if (in_args.Length <= 0)
+                return false;
 
-            in_console.Client.SendCommand($"magicboot title=\"{file}\"");
+            if (!in_console.FileSystem.FileExists(in_args[0]) || Path.GetExtension(in_args[0]) != ".xex")
+                return false;
+
+            in_console.Launch(in_args[0], string.Join(' ', in_args.Skip(1)));
+
+            return true;
         }
     }
 }
