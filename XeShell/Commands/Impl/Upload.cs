@@ -5,7 +5,7 @@ using XeShell.Helpers;
 
 namespace XeShell.Commands.Impl
 {
-    [Command("upload", "ul", Inputs = [ typeof(string), typeof(string) ], OptionalInputs = [ typeof(bool) ])]
+    [Command("upload", "ul", Inputs = [ typeof(string), typeof(string) ])]
     public class Upload : ICommand
     {
         public void Execute(List<Command> in_commands, Command in_command, XeDbgConsole in_console)
