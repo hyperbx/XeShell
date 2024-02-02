@@ -4,6 +4,7 @@ using XeSharp.Net.Sockets;
 using XeShell.Commands;
 using XeShell.Commands.Impl;
 using XeShell.Exceptions;
+using XeShell.Helpers;
 
 namespace XeShell
 {
@@ -59,12 +60,10 @@ namespace XeShell
         {
             Welcome();
 
-            return AnsiConsole.Status().Start($"Connecting to \"{in_hostName}\"...",
+            return ConsoleHelper.StatusCommon($"Connecting to \"{in_hostName}\"...",
             //
                 ctx =>
                 {
-                    ctx.Spinner(Spinner.Known.Line);
-
 #if !DEBUG
                     try
 #endif
@@ -137,6 +136,12 @@ namespace XeShell
             {
                 Console.WriteLine(out_ex.Message);
             }
+#if !DEBUG
+            catch (Exception out_ex)
+            {
+                Console.WriteLine($"An internal error occurred.\n{out_ex}");
+            }
+#endif
 
             // User disconnected gracefully.
             if (_gracefulExitCommands.Contains(prompt.ToLower()))

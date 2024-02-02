@@ -3,6 +3,7 @@ using System.Text;
 using XeSharp.Device;
 using XeSharp.Device.Title;
 using XeSharp.Helpers;
+using XeShell.Helpers;
 
 namespace XeShell.Commands.Impl
 {
@@ -69,12 +70,10 @@ namespace XeShell.Commands.Impl
             }
 
             var status = $"Scanning for \"{(isByteInput ? param1 : MemoryHelper.ByteArrayToHexString(pattern))}\"...";
-            var results = AnsiConsole.Status().Start(status,
+            var results = ConsoleHelper.StatusCommon(status,
             //
                 ctx =>
                 {
-                    ctx.Spinner(Spinner.Known.Line);
-
                     if (isUseCachedMemory)
                         return in_console.ScanSignature(_memory, pattern, mask, in_isFirstResult: false);
 

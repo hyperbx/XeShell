@@ -1,6 +1,6 @@
-﻿using Spectre.Console;
-using XeSharp.Device;
+﻿using XeSharp.Device;
 using XeSharp.Helpers;
+using XeShell.Helpers;
 
 namespace XeShell.Commands.Impl
 {
@@ -19,15 +19,9 @@ namespace XeShell.Commands.Impl
             if (file == null)
                 return;
 
-            var data = AnsiConsole.Status().Start($"Downloading \"{path}\"... ({FormatHelper.ByteLengthToDecimalString(file.Size)})",
-            //
-                ctx =>
-                {
-                    ctx.Spinner(Spinner.Known.Line);
-
-                    return file.Download(in_console).Data;
-                }
-            );
+            var data = ConsoleHelper.StatusCommon(
+                $"Downloading \"{path}\"... ({FormatHelper.ByteLengthToDecimalString(file.Size)})",
+                ctx => file.Download(in_console).Data);
 
             Console.WriteLine($"Peeking {(len > file.Size ? file.Size : len)}/{file.Size} bytes from \"{path}\"...\n");
 
