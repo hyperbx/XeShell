@@ -9,13 +9,17 @@ namespace XeShell.Commands.Impl
         public void Execute(List<Command> in_commands, Command in_command, XeDbgConsole in_console)
         {
             var path = in_command.Inputs.Count > 0 ? (string)in_command.Inputs[0] : string.Empty;
+            var isCurrentDir = string.IsNullOrEmpty(path);
 
-            var dir = string.IsNullOrEmpty(path)
+            var dir = isCurrentDir
                 ? in_console.FileSystem.CurrentDirectory
                 : in_console.FileSystem.GetDirectoryFromPath(path);
 
             if (dir == null)
                 return;
+
+            if (isCurrentDir)
+                dir.Refresh(in_console);
 
             if (dir is XeFileSystemDrive || dir.Drive != null)
             {
