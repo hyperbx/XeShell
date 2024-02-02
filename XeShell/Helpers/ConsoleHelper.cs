@@ -6,11 +6,11 @@ namespace XeShell.Helpers
     {
         private static readonly ProgressColumn[] _defaultProgressColumns =
         [
+            new SpinnerColumn(),
             new TaskDescriptionColumn(),
             new ProgressBarColumn(),
             new PercentageColumn(),
-            new RemainingTimeColumn(),
-            new SpinnerColumn()
+            new RemainingTimeColumn()
         ];
 
         public static T StatusCommon<T>(string in_status, Func<StatusContext, T> in_action)
