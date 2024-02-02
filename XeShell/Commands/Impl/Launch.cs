@@ -15,7 +15,7 @@ namespace XeShell.Commands.Impl
             if (in_args.Length <= 0)
                 return false;
 
-            if (!in_console.FileSystem.FileExists(in_args[0]) || Path.GetExtension(in_args[0]) != ".xex")
+            if (!in_console.FileSystem.Exists(in_args[0]) || Path.GetExtension(in_args[0]) != ".xex")
                 return false;
 
             in_console.Launch(in_args[0], string.Join(' ', in_args.Skip(1)));

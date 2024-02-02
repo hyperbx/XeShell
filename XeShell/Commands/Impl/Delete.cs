@@ -11,7 +11,7 @@ namespace XeShell.Commands.Impl
         {
             var path = (string)in_command.Inputs[0];
 
-            if (!in_console.FileSystem.FileExists(path))
+            if (!in_console.FileSystem.Exists(path))
             {
                 Console.WriteLine($"Could Not Find {path}");
                 return;
