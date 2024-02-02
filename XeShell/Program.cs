@@ -1,5 +1,6 @@
 ﻿using Spectre.Console;
 using XeSharp.Device;
+using XeSharp.Helpers;
 using XeSharp.Net.Sockets;
 using XeShell.Commands;
 using XeShell.Commands.Impl;
@@ -8,7 +9,7 @@ using XeShell.Helpers;
 
 namespace XeShell
 {
-    internal class Program
+    public class Program
     {
         private static List<string> _gracefulExitCommands =
         [
@@ -47,7 +48,7 @@ namespace XeShell
             // TODO: use message processor in ICommand for handling static members?
             Poke.History.Clear();
 
-            Prompt(true);
+            Shell(true);
         }
 
         static void Welcome()
@@ -76,6 +77,9 @@ namespace XeShell
 #if !DEBUG
                     catch
                     {
+                        _client  = null;
+                        _console = null;
+
                         return false;
                     }
 #endif
@@ -83,17 +87,23 @@ namespace XeShell
             );
         }
 
-        static void Prompt(bool in_isInitial = false)
+        static void Shell(bool in_isInitial = false)
         {
             if (in_isInitial)
             {
                 Welcome();
-                Console.WriteLine($"\nConnected to \"{_client.HostName}\".\n\n{_console.Info}\n");
+                Console.WriteLine($"\nConnected to \"{_client.HostName}\".\n\n{_console.Info}");
             }
 
-            /* TODO: use Stack<T> and restore previous prompts on arrow
-               keys (might require own implementation of the prompt). */
-            var prompt = AnsiConsole.Prompt(new TextPrompt<string>($"{_console.FileSystem.CurrentDirectory}>"));
+            Console.WriteLine();
+
+            var prompt = Prompt.Show($"{_console.FileSystem.CurrentDirectory}>");
+
+            if (prompt.IsNullOrEmptyOrWhiteSpace())
+            {
+                Shell();
+                return;
+            }
 
             try
             {
@@ -104,6 +114,7 @@ namespace XeShell
 
                     if (response == null || !_client.IsConnected())
                     {
+                        // TODO: make sure this works??
                         Console.WriteLine("Connection to the server has been lost...");
                     }
                     else
@@ -151,9 +162,7 @@ namespace XeShell
                 return;
             }
 
-            Console.WriteLine();
-
-            Prompt();
+            Shell();
         }
     }
 }
