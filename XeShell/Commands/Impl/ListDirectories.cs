@@ -3,7 +3,7 @@ using XeSharp.Device.FileSystem;
 
 namespace XeShell.Commands.Impl
 {
-    [Command("dir", OptionalInputs = [ typeof(string) ])]
+    [Command("dir", "ls", OptionalInputs = [ typeof(string) ])]
     public class ListDirectories : ICommand
     {
         public void Execute(List<Command> in_commands, Command in_command, XeDbgConsole in_console)
