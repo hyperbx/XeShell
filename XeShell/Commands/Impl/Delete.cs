@@ -25,7 +25,7 @@ namespace XeShell.Commands.Impl
 
             if (node.Type == EXeFileSystemNodeType.Directory)
             {
-                if (!AnsiConsole.Confirm($@"{node}\*, Are you sure?"))
+                if (!AnsiConsole.Confirm($@"{node}\*, Are you sure?", false))
                     return;
             }
 
