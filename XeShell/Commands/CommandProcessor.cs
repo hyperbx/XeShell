@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using XeSharp.Device;
 using XeSharp.Helpers;
-using XeShell.Exceptions;
 
 // https://github.com/thesupersonic16/HedgeModManager/blob/rewrite/HedgeModManager/CLI/CommandLine.cs
 
