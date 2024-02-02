@@ -12,8 +12,10 @@ namespace XeShell.Commands.Impl
             var lastDir = in_console.FileSystem.CurrentDirectory;
             var currentDir = in_console.FileSystem.ChangeDirectory(in_command.InvokedName == "cd.." ? ".." : dir);
 
-            if (currentDir == lastDir)
-                Console.WriteLine("The system cannot find the path specified.");
+            if (currentDir != lastDir)
+                return;
+            
+            Console.WriteLine("The system cannot find the path specified.");
         }
 
         public bool ExecuteRaw(string[] in_args, XeDbgConsole in_console)
@@ -21,7 +23,7 @@ namespace XeShell.Commands.Impl
             if (in_args.Length <= 0 || !in_args[0].EndsWith(':'))
                 return false;
 
-            if (!in_console.FileSystem.GetDrives(false).Any(x => x.Name.ToLower() == in_args[0].ToLower()))
+            if (!in_console.FileSystem.GetDrives(in_isRecursiveNodes: false).Any(x => x.Name.ToLower() == in_args[0].ToLower()))
                 return false;
 
             in_console.FileSystem.ChangeDirectory(in_args[0]);
