@@ -39,16 +39,19 @@ namespace XeShell.Commands.Impl
 		{
 			{ "cd/cd..",        ("Changes to the specified directory.", "cd [path]") },
 			{ "clear/cls",      ("Clear XeShell command prompt.", "") },
-			{ "dir",            ("Lists the current or specified directory's contents.", "dir [opt: path]") },
-			{ "help/?",         ("Displays help information.", "") },
+            { "del/rm",         ("Deletes a remote file or directory.", "del [remote path]") },
+            { "dir/ls",         ("Lists the current or specified directory's contents.", "dir [opt: path]") },
+            { "download/dl",    ("Downloads a remote file.", "download [remote source] [local destination]") },
+            { "help/?",         ("Displays help information.", "") },
 			{ "info/info.",     ("Displays information about the connected console or specified filesystem node.", "info [opt: file/directory]") },
 			{ "launch",         ("Launches the specified executable binary.", "launch [path]") },
 			{ "peek",           ("Reads data from a memory address and prints it.", "peek [address] [opt: amount of bytes to read]") },
 			{ "peekfile/peekf", ("Reads data from a file and prints it.", "peekfile [path] [opt: amount of bytes to read]") },
 			{ "poke",           ("Writes data to a virtual address.", "poke [address] [opt: i8/u8/i16/u16/i32/u32/i64/u64/nop/string/wstring] [data]") },
 			{ "scan",           ("Scans memory for data.", "scan [opt: i8/u8/i16/u16/i32/u32/i64/u64/string/wstring] [data] [opt: module name]") },
-			{ "undo",           ("Undoes memory changes via the poke command (only works per session).", "undo [opt: address]") }
-		};
+            { "undo",           ("Undoes memory changes via the poke command (only works per session).", "undo [opt: address]") },
+            { "upload/ul",      ("Uploads a file.", "upload [local source] [remote destination]") }
+        };
 
 		private Dictionary<string, (string Description, string Usage)> _xbdmDefinitions = new()
 		{
