@@ -45,7 +45,7 @@ namespace XeShell
                 return;
             }
 
-            // TODO: use message processor in ICommand for handling static members?
+            // TODO: set up command callbacks.
             Poke.History.Clear();
 
             Shell(true);
@@ -105,6 +105,7 @@ namespace XeShell
                 return;
             }
 
+            // TODO: allow cancelling operations.
             try
             {
                 // Intercept unimplemented XBDM commands with our own.
