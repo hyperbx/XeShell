@@ -69,18 +69,34 @@ namespace XeShell.Commands.Impl
                     isUseCachedMemory = true;
             }
 
-            var status = $"Scanning for \"{(isByteInput ? param1 : MemoryHelper.ByteArrayToHexString(pattern))}\"...";
-            var results = ConsoleHelper.StatusCommon(status,
+            if (!isUseCachedMemory)
+            {
+                _memory = ConsoleHelper.ProgressCommon
+                (
+                    ctx =>
+                    {
+                        var task = ctx.AddTask("Downloading title image...");
+                        var total = currentModule.ImageSize;
+
+                        in_console.Client.ReadEvent += (s, e) =>
+                        {
+                            task.Description(
+                                $"Downloading title image... " +
+                                $"({FormatHelper.ByteLengthToDecimalString(e.BytesRead / 2)} / {FormatHelper.ByteLengthToDecimalString(total)})");
+
+                            task.MaxValue(total);
+                            task.Value(e.BytesRead / 2);
+                        };
+
+                        return in_console.ReadBytes(currentModule.BaseAddress, (int)total);
+                    }
+                );
+            }
+
+            var results = ConsoleHelper.StatusCommon($"Scanning for \"{(isByteInput ? param1 : MemoryHelper.ByteArrayToHexString(pattern))}\"...",
             //
                 ctx =>
                 {
-                    if (isUseCachedMemory)
-                        return in_console.ScanSignature(_memory, pattern, mask, in_isFirstResult: false);
-
-                    ctx.Status($"Downloading title image... ({FormatHelper.ByteLengthToDecimalString(currentModule.ImageSize)})");
-                    _memory = in_console.ReadBytes(currentModule.BaseAddress, (int)currentModule.ImageSize);
-                    ctx.Status(status);
-
                     return in_console.ScanSignature(_memory, pattern, mask, in_isFirstResult: false);
                 }
             );
