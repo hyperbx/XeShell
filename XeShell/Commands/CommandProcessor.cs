@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using XeSharp.Device;
 using XeSharp.Helpers;
+using XeSharp.Logger;
 
 // https://github.com/thesupersonic16/HedgeModManager/blob/rewrite/HedgeModManager/CLI/CommandLine.cs
 
@@ -51,7 +52,7 @@ namespace XeShell.Commands
 
                 if (in_args.Length <= command.Key.Inputs?.Length + i)
                 {
-                    Console.WriteLine($"Error: too few inputs for command \"{command.Key.Name}\"", "");
+                    XeLogger.Error($"Error: too few inputs for command \"{command.Key.Name}\"");
                     break;
                 }
 
@@ -76,7 +77,7 @@ namespace XeShell.Commands
                         }
                         else
                         {
-                            Console.WriteLine($"Error: unknown type \"{input.Name}\" for command \"{command.Key.Name}\".");
+                            XeLogger.Error($"Error: unknown type \"{input.Name}\" for command \"{command.Key.Name}\".");
                         }
                     }
 

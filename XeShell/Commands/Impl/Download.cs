@@ -19,7 +19,7 @@ namespace XeShell.Commands.Impl
             var fileCount = node.GetTotalNodes(true, false);
             var fileIndex = 0;
 
-            var status = "Downloading file" + (fileCount == 0 ? "..." : "s...");
+            var status = "Downloading file" + (fileCount == 0 ? "..." : "s...") + " ";
 
             ConsoleHelper.ProgressCommon
             (
@@ -36,7 +36,7 @@ namespace XeShell.Commands.Impl
                             fileIndex = (int)Math.Min(fileCount, fileIndex + 1);
 
                         task.Description(
-                            $"{status}" + (fileCount == 0 ? "" : $" ({fileIndex} / {fileCount}) ") +
+                            $"{status}" + (fileCount == 0 ? "" : $"({fileIndex} / {fileCount}) ") +
                             $"({FormatHelper.ByteLengthToDecimalString(e.BytesRead)} / {FormatHelper.ByteLengthToDecimalString(e.BytesTotal)})");
 
                         task.MaxValue(e.BytesTotal);

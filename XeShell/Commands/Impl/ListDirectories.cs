@@ -1,5 +1,6 @@
 ﻿using XeSharp.Device;
 using XeSharp.Device.FileSystem;
+using XeSharp.Logger;
 
 namespace XeShell.Commands.Impl
 {
@@ -26,11 +27,11 @@ namespace XeShell.Commands.Impl
                 var drive = dir.Drive ?? dir as XeFileSystemDrive;
 
                 if (!string.IsNullOrEmpty(drive.FriendlyName))
-                    Console.WriteLine($" Volume in drive {drive.Name[..^1]} is {drive.FriendlyName}\n");
+                    XeLogger.Log($" Volume in drive {drive.Name[..^1]} is {drive.FriendlyName}\n");
             }
 
             if (!string.IsNullOrEmpty(dir.ToString()))
-                Console.WriteLine($" Directory of {dir}\n");
+                XeLogger.Log($" Directory of {dir}\n");
 
             var fileCount = 0;
             var dirCount = 0;
@@ -59,8 +60,8 @@ namespace XeShell.Commands.Impl
                 }
             }
 
-            Console.WriteLine($"\t       {fileCount} File(s) {string.Format("{0,14}", totalFileSize.ToString("N0"))} bytes");
-            Console.WriteLine($"\t       {dirCount} Dir(s)");
+            XeLogger.Log($"\t       {fileCount} File(s) {string.Format("{0,14}", totalFileSize.ToString("N0"))} bytes");
+            XeLogger.Log($"\t       {dirCount} Dir(s)");
         }
 
         public bool ExecuteRaw(string[] in_args, XeDbgConsole in_console)

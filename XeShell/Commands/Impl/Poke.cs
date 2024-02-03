@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using XeSharp.Device;
 using XeSharp.Helpers;
+using XeSharp.Logger;
 using XeSharp.Net;
 
 namespace XeShell.Commands.Impl
@@ -93,11 +94,11 @@ namespace XeShell.Commands.Impl
 
             if (response.Status.IsFailed())
             {
-                Console.WriteLine(response.Status);
+                XeLogger.Error(response.Status);
                 return;
             }
 
-            Console.WriteLine($"Successfully written {len} bytes to 0x{addr:X}.\n");
+            XeLogger.Log($"Successfully written {len} bytes to 0x{addr:X}.\n");
 
             MemoryHelper.PrintBytes(in_console.ReadBytes(addr, len), addr);
         }

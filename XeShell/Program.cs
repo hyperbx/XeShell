@@ -1,6 +1,7 @@
 ﻿using Spectre.Console;
 using XeSharp.Device;
 using XeSharp.Helpers;
+using XeSharp.Logger;
 using XeSharp.Net.Sockets;
 using XeShell.Commands;
 using XeShell.Commands.Impl;
@@ -39,7 +40,7 @@ namespace XeShell
 
             if (!Connect(hostName))
             {
-                Console.WriteLine($"\nFailed to establish a connection to \"{hostName}\"...");
+                XeLogger.Log($"\nFailed to establish a connection to \"{hostName}\"...");
                 Thread.Sleep(2500); // Sleep to display error message.
                 Main();
                 return;
@@ -92,7 +93,7 @@ namespace XeShell
             if (in_isInitial)
             {
                 Welcome();
-                Console.WriteLine($"\nConnected to \"{_client.HostName}\".\n\n{_console.Info}");
+                XeLogger.Log($"\nConnected to \"{_client.HostName}\".\n\n{_console.Info}");
             }
 
             Console.WriteLine();
@@ -116,14 +117,14 @@ namespace XeShell
                     if (response == null || !_client.IsConnected())
                     {
                         // TODO: make sure this works??
-                        Console.WriteLine("Connection to the server has been lost...");
+                        XeLogger.Error("Connection to the server has been lost...");
                     }
                     else
                     {
                         if (response.Results?.Length > 0)
                         {
                             foreach (var result in response.Results)
-                                Console.WriteLine(result);
+                                XeLogger.Log(result);
                         }
                         else
                         {
@@ -134,11 +135,11 @@ namespace XeShell
                                 if (response.Status.ToHResult() == XeSharp.Net.EXeDbgStatusCode.XBDM_INVALIDCMD)
                                     throw new UnknownCommandException(prompt.Split(' ')[0]);
 
-                                Console.WriteLine(isMessage ? response.Message : response.Status.ToString());
+                                XeLogger.Error(isMessage ? response.Message : response.Status.ToString());
                             }
                             else if (isMessage)
                             {
-                                Console.WriteLine(response.Message);
+                                XeLogger.Log(response.Message);
                             }
                         }
                     }
@@ -146,12 +147,12 @@ namespace XeShell
             }
             catch (UnknownCommandException out_ex)
             {
-                Console.WriteLine(out_ex.Message);
+                XeLogger.Error(out_ex.Message);
             }
 #if !DEBUG
             catch (Exception out_ex)
             {
-                Console.WriteLine($"An internal error occurred.\n{out_ex}");
+                Logger.Error($"An internal error occurred.\n{out_ex}");
             }
 #endif
 

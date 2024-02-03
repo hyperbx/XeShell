@@ -1,5 +1,6 @@
 ﻿using XeSharp.Device;
 using XeSharp.Helpers;
+using XeSharp.Logger;
 
 namespace XeShell.Commands.Impl
 {
@@ -15,7 +16,7 @@ namespace XeShell.Commands.Impl
 
             if (!Poke.History.ContainsKey(addr))
             {
-                Console.WriteLine("Nothing to undo" + (addr == 0 ? "" : $" at 0x{addr:X}") + "...");
+                XeLogger.Log("Nothing to undo" + (addr == 0 ? "" : $" at 0x{addr:X}") + "...");
                 return;
             }
 
@@ -24,7 +25,7 @@ namespace XeShell.Commands.Impl
 
             in_console.WriteBytes(addr, undo);
 
-            Console.WriteLine($"Undone {len} bytes at 0x{addr:X}...\n");
+            XeLogger.Log($"Undone {len} bytes at 0x{addr:X}...\n");
 
             Poke.History.Remove(addr);
 

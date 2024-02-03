@@ -1,5 +1,6 @@
 ﻿using XeSharp.Device;
 using XeSharp.Helpers;
+using XeSharp.Logger;
 
 namespace XeShell.Commands.Impl
 {
@@ -14,7 +15,7 @@ namespace XeShell.Commands.Impl
             if (in_command.Inputs.Count > 1)
                 len = (int)in_command.Inputs[1];
 
-            Console.WriteLine($"Peeking {len} bytes at 0x{addr:X}...\n");
+            XeLogger.Log($"Peeking {len} bytes at 0x{addr:X}...\n");
 
             MemoryHelper.PrintBytes(in_console.ReadBytes(addr, len), addr);
         }

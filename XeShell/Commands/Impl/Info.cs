@@ -1,4 +1,5 @@
 ﻿using XeSharp.Device;
+using XeSharp.Logger;
 
 namespace XeShell.Commands.Impl
 {
@@ -11,7 +12,7 @@ namespace XeShell.Commands.Impl
 
             if (in_command.Inputs.Count <= 0 && !isDirInfo)
             {
-                Console.WriteLine(in_console.Info.ToString());
+                XeLogger.Log(in_console.Info.ToString());
                 return;
             }
 
@@ -24,7 +25,7 @@ namespace XeShell.Commands.Impl
             if (node == null)
                 return;
 
-            Console.WriteLine(node.GetInfo());
+            XeLogger.Log(node.GetInfo());
         }
 
         public bool ExecuteRaw(string[] in_args, XeDbgConsole in_console)

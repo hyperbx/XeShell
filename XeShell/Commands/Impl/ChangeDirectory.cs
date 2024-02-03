@@ -1,4 +1,5 @@
 ﻿using XeSharp.Device;
+using XeSharp.Logger;
 
 namespace XeShell.Commands.Impl
 {
@@ -15,7 +16,7 @@ namespace XeShell.Commands.Impl
             if (currentDir != lastDir)
                 return;
             
-            Console.WriteLine("The system cannot find the path specified.");
+            XeLogger.Error("The system cannot find the path specified.");
         }
 
         public bool ExecuteRaw(string[] in_args, XeDbgConsole in_console)

@@ -1,6 +1,7 @@
 ﻿using Spectre.Console;
 using XeSharp.Device;
 using XeSharp.Device.FileSystem;
+using XeSharp.Logger;
 
 namespace XeShell.Commands.Impl
 {
@@ -13,7 +14,7 @@ namespace XeShell.Commands.Impl
 
             if (!in_console.FileSystem.Exists(path))
             {
-                Console.WriteLine($"Could Not Find {path}");
+                XeLogger.Error($"Could Not Find {path}");
                 return;
             }
 

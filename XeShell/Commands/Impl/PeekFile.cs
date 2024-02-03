@@ -1,5 +1,6 @@
 ﻿using XeSharp.Device;
 using XeSharp.Helpers;
+using XeSharp.Logger;
 using XeShell.Helpers;
 
 namespace XeShell.Commands.Impl
@@ -23,7 +24,7 @@ namespace XeShell.Commands.Impl
                 $"Downloading \"{path}\"... ({FormatHelper.ByteLengthToDecimalString(file.Size)})",
                 ctx => file.Download().Data);
 
-            Console.WriteLine($"Peeking {(len > file.Size ? file.Size : len)}/{file.Size} bytes from \"{path}\"...\n");
+            XeLogger.Log($"Peeking {(len > file.Size ? file.Size : len)}/{file.Size} bytes from \"{path}\"...\n");
 
             MemoryHelper.PrintBytes(data.Take(len).ToArray());
         }

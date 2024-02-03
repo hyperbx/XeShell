@@ -3,6 +3,7 @@ using System.Text;
 using XeSharp.Device;
 using XeSharp.Device.Title;
 using XeSharp.Helpers;
+using XeSharp.Logger;
 using XeShell.Helpers;
 
 namespace XeShell.Commands.Impl
@@ -23,7 +24,7 @@ namespace XeShell.Commands.Impl
 
             if (!string.IsNullOrEmpty(param3) && !modules.ContainsKey(param3))
             {
-                Console.WriteLine("The specified module is not resident in memory.");
+                XeLogger.Error("The specified module is not resident in memory.");
                 return;
             }
 
@@ -107,14 +108,14 @@ namespace XeShell.Commands.Impl
 
             if (results.Count <= 0)
             {
-                Console.WriteLine("Sequence not found.");
+                XeLogger.Log("Sequence not found.");
                 return;
             }
 
-            Console.WriteLine($"Found {results.Count} sequence{(results.Count == 1 ? ":" : "s:")}");
+            XeLogger.Log($"Found {results.Count} sequence{(results.Count == 1 ? ":" : "s:")}");
 
             foreach (var result in results)
-                Console.WriteLine($"- 0x{result:X}");
+                XeLogger.Log($"- 0x{result:X}");
         }
 
         public bool ExecuteRaw(string[] in_args, XeDbgConsole in_console)

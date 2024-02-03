@@ -1,4 +1,5 @@
 ﻿using XeSharp.Device;
+using XeSharp.Logger;
 
 namespace XeShell.Commands.Impl
 {
@@ -9,17 +10,16 @@ namespace XeShell.Commands.Impl
 		{
 			static void PrintDefinitions(string in_category, Dictionary<string, (string Description, string Usage)> in_defs)
 			{
-				Console.WriteLine();
-				Console.WriteLine($"{in_category}:");
+				XeLogger.Log($"\n{in_category}:");
 
 				foreach (var entry in in_defs)
 				{
-					Console.WriteLine($"{entry.Key}: {entry.Value.Description.Replace("\n", "\n        ")}");
+					XeLogger.Log($"{entry.Key}: {entry.Value.Description.Replace("\n", "\n        ")}");
 
 					if (string.IsNullOrEmpty(entry.Value.Usage))
 						continue;
 
-					Console.WriteLine($"    Usage: {entry.Value.Usage.Replace("\n", "\n           ")}");
+					XeLogger.Log($"    Usage: {entry.Value.Usage.Replace("\n", "\n           ")}");
 				}
 			}
 
