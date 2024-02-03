@@ -21,7 +21,7 @@ namespace XeShell.Commands.Impl
 
             var data = ConsoleHelper.StatusCommon(
                 $"Downloading \"{path}\"... ({FormatHelper.ByteLengthToDecimalString(file.Size)})",
-                ctx => file.Download(in_console).Data);
+                ctx => file.Download().Data);
 
             Console.WriteLine($"Peeking {(len > file.Size ? file.Size : len)}/{file.Size} bytes from \"{path}\"...\n");
 

@@ -29,7 +29,7 @@ namespace XeShell.Commands.Impl
                     return;
             }
 
-            node.Delete(in_console);
+            node.Delete();
         }
 
         public bool ExecuteRaw(string[] in_args, XeDbgConsole in_console)

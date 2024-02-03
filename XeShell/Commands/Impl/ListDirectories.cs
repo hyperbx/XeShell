@@ -19,7 +19,7 @@ namespace XeShell.Commands.Impl
                 return;
 
             if (isCurrentDir)
-                dir.Refresh(in_console);
+                dir.Refresh();
 
             if (dir is XeFileSystemDrive || dir.Drive != null)
             {
