@@ -8,6 +8,12 @@ A command prompt that interfaces with Freeboot XBDM on a remote Xbox 360.
 - Peeking file data.
 - Signature scanning.
 
+# Prerequisites
+### Running
+- .NET 8.0 Runtime ([x86](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-8.0.1-windows-x86-installer), [x64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-8.0.1-windows-x64-installer))
+### Building
+- [.NET 8.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+
 # Commands
 **XeShell** includes all existing XBDM commands (including custom commands from Freeboot XBDM), as well as extended commands listed below.
 
