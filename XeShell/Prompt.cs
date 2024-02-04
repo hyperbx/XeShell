@@ -90,8 +90,9 @@ namespace XeShell
             {
                 _history.Add(result);
                 _historyIndex = _history.Count;
-                _inputIndex = 0;
             }
+
+            _inputIndex = 0;
 
             return result;
         }
@@ -120,7 +121,7 @@ namespace XeShell
 
             // Keep cursor within the boundaries of post-prompt length and pre-input length.
             var newPos = Math.Max(_prompt.Length,
-                Math.Min(_prompt.Length + _input.Length, Console.GetCursorPosition().Left + in_relativePosition));
+                Math.Min(_prompt.Length + _input.Length, Seek + in_relativePosition));
 
             Seek = newPos;
         }
