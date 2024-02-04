@@ -9,6 +9,8 @@ A command prompt that interfaces with Freeboot XBDM on a remote Xbox 360.
 - Signature scanning.
 
 # Commands
+**XeShell** includes all existing XBDM commands (including custom commands from Freeboot XBDM), as well as extended commands listed below.
+
 Command | Description
 --------|------------
 `cd / cd..`|Changes to the specified directory.
