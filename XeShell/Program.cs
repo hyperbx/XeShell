@@ -12,6 +12,12 @@ namespace XeShell
 {
     public class Program
     {
+#if !DEBUG
+        private const string _programName = "XeShell";
+#else
+        private const string _programName = "XeShell Debug";
+#endif
+
         private static List<string> _gracefulExitCommands =
         [
             "bye",
@@ -40,9 +46,7 @@ namespace XeShell
 
             if (!Connect(hostName))
             {
-                XeLogger.Log($"\nFailed to establish a connection to \"{hostName}\"...");
-                Thread.Sleep(2500); // Sleep to display error message.
-                Main();
+                Error($"\nFailed to establish a connection to \"{hostName}\"...");
                 return;
             }
 
@@ -52,10 +56,17 @@ namespace XeShell
             Shell(true);
         }
 
+        static void Error(string in_message, int in_timeout = 2500)
+        {
+            XeLogger.Error(in_message);
+            Thread.Sleep(in_timeout);
+            Main();
+        }
+
         static void Welcome()
         {
             Console.Clear();
-            Console.WriteLine($"XeShell [Version {Extensions.AssemblyExtensions.GetInformationalVersion()}]");
+            Console.WriteLine($"{_programName} [Version {Extensions.AssemblyExtensions.GetInformationalVersion()}]");
         }
 
         static bool Connect(string in_hostName)
@@ -109,38 +120,38 @@ namespace XeShell
             // TODO: allow cancelling operations.
             try
             {
+                if (!_client.Ping())
+                {
+                    Welcome();
+                    Error("\nConnection to the server has been lost...");
+                    return;
+                }
+
                 // Intercept unimplemented XBDM commands with our own.
                 if (!CommandProcessor.ExecuteArguments(prompt, _console))
                 {
-                    var response = _client.SendCommand(prompt, false);
+                    var response = _client.SendCommand(prompt, false)
+                        ?? throw new HttpIOException(HttpRequestError.InvalidResponse, "The server response returned null.");
 
-                    if (response == null || !_client.IsConnected())
+                    if (response.Results?.Length > 0)
                     {
-                        // TODO: make sure this works??
-                        XeLogger.Error("Connection to the server has been lost...");
+                        foreach (var result in response.Results)
+                            XeLogger.Log(result);
                     }
                     else
                     {
-                        if (response.Results?.Length > 0)
+                        bool isMessage = !string.IsNullOrEmpty(response.Message);
+
+                        if (response.Status.IsFailed())
                         {
-                            foreach (var result in response.Results)
-                                XeLogger.Log(result);
+                            if (response.Status.ToHResult() == XeSharp.Net.EXeDbgStatusCode.XBDM_INVALIDCMD)
+                                throw new UnknownCommandException(prompt.Split(' ')[0]);
+
+                            XeLogger.Error(isMessage ? response.Message : response.Status.ToString());
                         }
-                        else
+                        else if (isMessage)
                         {
-                            bool isMessage = !string.IsNullOrEmpty(response.Message);
-
-                            if (response.Status.IsFailed())
-                            {
-                                if (response.Status.ToHResult() == XeSharp.Net.EXeDbgStatusCode.XBDM_INVALIDCMD)
-                                    throw new UnknownCommandException(prompt.Split(' ')[0]);
-
-                                XeLogger.Error(isMessage ? response.Message : response.Status.ToString());
-                            }
-                            else if (isMessage)
-                            {
-                                XeLogger.Log(response.Message);
-                            }
+                            XeLogger.Log(response.Message);
                         }
                     }
                 }
@@ -152,7 +163,7 @@ namespace XeShell
 #if !DEBUG
             catch (Exception out_ex)
             {
-                Logger.Error($"An internal error occurred.\n{out_ex}");
+                XeLogger.Error($"An internal error occurred.\n{out_ex}");
             }
 #endif
 
