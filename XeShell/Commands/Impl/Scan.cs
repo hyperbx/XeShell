@@ -91,7 +91,7 @@ namespace XeShell.Commands.Impl
 
                         try
                         {
-                            return in_console.ReadBytes(currentModule.BaseAddress, (int)total);
+                            return in_console.ReadBytes(currentModule.BaseAddress, total);
                         }
                         catch (OperationCanceledException) // TODO: move this exception handling to the library?
                         {

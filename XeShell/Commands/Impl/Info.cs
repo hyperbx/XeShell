@@ -3,7 +3,7 @@ using XeSharp.Logger;
 
 namespace XeShell.Commands.Impl
 {
-    [Command("info", "info.", OptionalInputs = [typeof(string)])]
+    [Command("info", "info.", OptionalInputs = [ typeof(string) ])]
     public class Info : ICommand
     {
         public void Execute(List<Command> in_commands, Command in_command, XeDbgConsole in_console)

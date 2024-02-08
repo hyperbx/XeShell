@@ -15,7 +15,7 @@ namespace XeShell.Commands.Impl
         public void Execute(List<Command> in_commands, Command in_command, XeDbgConsole in_console)
         {
             var addr = (uint)in_command.Inputs[0];
-            var len = 0;
+            var len = 0U;
 
             var param1 = (string)in_command.Inputs[1];
             var param2 = in_command.Inputs.Count > 2 ? (string)in_command.Inputs[2] : null;
@@ -28,23 +28,23 @@ namespace XeShell.Commands.Impl
             // Get data length.
             switch (param1)
             {
-                case "i8":      len = 1;                 break;
-                case "u8":      len = 1;                 break;
-                case "i16":     len = 2;                 break;
-                case "u16":     len = 2;                 break;
-                case "i32":     len = 4;                 break;
-                case "u32":     len = 4;                 break;
-                case "i64":     len = 8;                 break;
-                case "u64":     len = 8;                 break;
-                case "f32":     len = 4;                 break;
-                case "f64":     len = 8;                 break;
-                case "nop":     len = 4;                 break;
-                case "string":  len = param2.Length;     break;
-                case "wstring": len = param2.Length * 2; break;
+                case "i8":      len = 1;                       break;
+                case "u8":      len = 1;                       break;
+                case "i16":     len = 2;                       break;
+                case "u16":     len = 2;                       break;
+                case "i32":     len = 4;                       break;
+                case "u32":     len = 4;                       break;
+                case "i64":     len = 8;                       break;
+                case "u64":     len = 8;                       break;
+                case "f32":     len = 4;                       break;
+                case "f64":     len = 8;                       break;
+                case "nop":     len = 4;                       break;
+                case "string":  len = (uint)param2.Length;     break;
+                case "wstring": len = (uint)param2.Length * 2; break;
 
                 default:
                     data = MemoryHelper.HexStringToByteArray(param1);
-                    len = data.Length;
+                    len = (uint)data.Length;
                     break;
             }
 
@@ -59,7 +59,7 @@ namespace XeShell.Commands.Impl
                     var bytes = out_originalData.ToList();
 
                     // Append unmodified bytes to the current original bytes.
-                    bytes.AddRange(in_console.ReadBytes((uint)(addr + out_originalData.Length), len - out_originalData.Length));
+                    bytes.AddRange(in_console.ReadBytes((uint)(addr + out_originalData.Length), len - (uint)out_originalData.Length));
 
                     History[addr] = [.. bytes];
                 }

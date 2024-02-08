@@ -4,16 +4,16 @@ using XeSharp.Logger;
 
 namespace XeShell.Commands.Impl
 {
-    [Command("peek", Inputs = [ typeof(uint) ], OptionalInputs = [ typeof(int) ])]
+    [Command("peek", Inputs = [ typeof(uint) ], OptionalInputs = [ typeof(uint) ])]
     public class Peek : ICommand
     {
         public void Execute(List<Command> in_commands, Command in_command, XeDbgConsole in_console)
         {
             var addr = (uint)in_command.Inputs[0];
-            var len = 64;
+            var len = 64U;
 
             if (in_command.Inputs.Count > 1)
-                len = (int)in_command.Inputs[1];
+                len = (uint)in_command.Inputs[1];
 
             var result = in_console.ReadBytes(addr, len);
 

@@ -21,7 +21,7 @@ namespace XeShell.Commands.Impl
             }
 
             var undo = Poke.History[addr];
-            var len  = undo.Length;
+            var len  = (uint)undo.Length;
 
             in_console.WriteBytes(addr, undo);
 
