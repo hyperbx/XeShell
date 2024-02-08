@@ -42,6 +42,7 @@ namespace XeShell.Commands.Impl
 			{ "del/rm",         ("Deletes a remote file or directory.", "del [remote path]") },
 			{ "dir/ls",         ("Lists the current or specified directory's contents.", "dir [opt: path]") },
 			{ "download/dl",    ("Downloads a remote file.", "download [remote source] [local destination]") },
+			{ "exit",           ("Exits XeShell.", "") },
 			{ "help/?",         ("Displays help information.", "") },
 			{ "info/info.",     ("Displays information about the connected console or specified filesystem node.", "info [opt: file/directory]") },
 			{ "launch",         ("Launches the specified executable binary.", "launch [path]") },
