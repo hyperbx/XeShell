@@ -20,10 +20,11 @@ A command prompt that interfaces with Freeboot XBDM on a remote Xbox 360.
 Command|Alias|Description
 -------|-----|-----------
 `cd`|`cd..`|Changes to the specified directory.
-`clear`|`cls`|Clears the command prompt.
+`cls`|`clear`|Clears the command prompt.
 `del`|`rm`|Deletes a remote file or directory.
 `dir`|`ls`|Lists the current or specified directory's contents.
 `download`|`dl`|Downloads a remote file.
+`exit`||Exits the command prompt.
 `help`|`?`|Displays help information.
 `info`|`info.`|Displays information about the connected console or specified filesystem node.
 `launch`||Launches the specified executable binary.

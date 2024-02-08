@@ -2,7 +2,7 @@
 
 namespace XeShell.Commands.Impl
 {
-    [Command("clear", "cls")]
+    [Command("cls", "clear")]
     public class ClearScreen : ICommand
     {
         public void Execute(List<Command> in_commands, Command in_command, XeDbgConsole in_console)
