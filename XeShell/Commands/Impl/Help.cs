@@ -10,16 +10,31 @@ namespace XeShell.Commands.Impl
 		{
 			static void PrintDefinitions(string in_category, Dictionary<string, (string Description, string Usage)> in_defs)
 			{
-				XeLogger.Log($"\n{in_category}:");
+				XeLogger.Log($"\n{in_category};");
 
 				foreach (var entry in in_defs)
 				{
-					XeLogger.Log($"{entry.Key}: {entry.Value.Description.Replace("\n", "\n        ")}");
+					var isUsage = !string.IsNullOrEmpty(entry.Value.Usage);
+					var point = isUsage ? '┬' : '-';
 
-					if (string.IsNullOrEmpty(entry.Value.Usage))
+					XeLogger.Log($"{point} {entry.Key}: " +
+						entry.Value.Description.Replace("\n", $"\n│{new string(' ', entry.Key.Length + 3)}"));
+
+					if (!isUsage)
 						continue;
 
-					XeLogger.Log($"    Usage: {entry.Value.Usage.Replace("\n", "\n           ")}");
+					var usageStr = "Usage";
+
+					// Line drawing for usage string for easier reading.
+					var space = '└' + new string('─', Math.Max(1, entry.Key.Length - usageStr.Length)) + ' ';
+
+					// Whitespace for line feeds.
+					var spaceLf = new string(' ', entry.Key.Length + usageStr.Length - 1);
+
+					Console.Write(space);
+
+					// Using XeLogger.Utility for green output.
+					XeLogger.Utility($"{usageStr}: {entry.Value.Usage.Replace("\n", $"\n{spaceLf}")}");
 				}
 			}
 
@@ -27,7 +42,7 @@ namespace XeShell.Commands.Impl
 			PrintDefinitions("XBDM commands", _xbdmDefinitions);
 
 			if (in_console.Client.Info.IsFreebootXBDM)
-				PrintDefinitions("XBDM extended commands (speculatory)", _xbdmExDefinitions);
+				PrintDefinitions("Freeboot XBDM commands", _xbdmExDefinitions);
         }
 
         public bool ExecuteRaw(string[] in_args, XeDbgConsole in_console)
@@ -75,15 +90,12 @@ namespace XeShell.Commands.Impl
 			{ "dvdeject",          ("Opens or closes the dvd tray.", "") },
 			{ "getconsoleid",      ("Gets the console id.", "") },
 			{ "getcontext",        ("Gets a thread context.", "") },
-			{ "getcpukey",         ("Gets the cpu key.", "") },
-			{ "getexecstate",      ("Displays the execution state.", "") },
 			{ "getfile",           ("Xbox->PC transfer.", "") },
 			{ "getfileattributes", ("Gets file attributes.", "") },
 			{ "getmem",            ("Reads memory at a virtual address and returns its data.", "getmem addr=[address] length=[amount of bytes to read]") },
 			{ "getmemex",          ("Gets memory in data.", "") },
 			{ "getpid",            ("Gets the process id.", "") },
 			{ "go",                ("Continues all threads.", "") },
-			{ "help",              ("Gets info on every command.", "") },
 			{ "isdebugger",        ("Gets info on the current debugger.", "") },
 			{ "isstopped",         ("Returns information on a stopped thread.", "") },
 			{ "magicboot",         ("Changes the currently running title, and/or reboots the console.", "") },
@@ -98,19 +110,15 @@ namespace XeShell.Commands.Impl
 			{ "screenshot",        ("Takes a screenshot.", "") },
 			{ "sendfile",          ("PC->Xbox transfer.", "") },
 			{ "sendvfile",         ("PC->Xbox transfer with several files.", "") },
-			{ "setcolor",          ("Sets the color of the console in Xbox 360 Neighborhood.", "setcolor name=[black/blue/bluegray/nosidecar/white]") },
 			{ "setcontext",        ("Sets a thread context.", "") },
 			{ "setfileattributes", ("Sets file attributes.", "") },
 			{ "setmem",            ("Writes a byte array to a virtual address.", "setmem addr=[address] data=[bytes to write]") },
 			{ "setsystime",        ("Sets the system time.", "") },
-			{ "shutdown",          ("Shuts down the console.", "") },
 			{ "stop",              ("Stops all threads.", "") },
 			{ "stopon",            ("Changes what we stop on.", "") },
-			{ "spew",              ("Spews debug output.", "") },
 			{ "suspend",           ("Suspends a thread.", "") },
 			{ "systeminfo",        ("Gets system info.", "") },
 			{ "systime",           ("Sets the system time.", "") },
-			{ "threadex",          ("Lists threads in a different format.", "") },
 			{ "threadinfo",        ("Returns info on a thread.", "") },
 			{ "threads",           ("Gets a list of threads.", "") },
 			{ "xbeinfo",           ("Gets information on the running executable.", "") },
@@ -120,10 +128,17 @@ namespace XeShell.Commands.Impl
 
 		private Dictionary<string, (string Description, string Usage)> _xbdmExDefinitions = new()
 		{
-			{ "hwinfo",      ("Does some listing of stuff for cOz.", "") },
-			{ "khoungdm",    ("Throws a fatal error with code E69.", "") },
-			{ "objlist",     ("Lists objects for cOz.", "") },
-			{ "whomadethis", ("Responds with the author of Freeboot XBDM.", "") }
+			{ "getcpukey",    ("Gets the CPU key.", "") },
+			{ "getexecstate", ("Displays the execution state.", "") },
+			{ "help",         ("Gets info on every command.", "") },
+			{ "hwinfo",       ("Does some listing of stuff for cOz.", "") },
+			{ "khoungdm",     ("Throws a fatal error with code E69.", "") },
+			{ "objlist",      ("Lists objects for cOz.", "") },
+			{ "setcolor",     ("Sets the color of the console in Xbox 360 Neighborhood.", "setcolor name=[black/blue/bluegray/nosidecar/white]") },
+			{ "shutdown",     ("Shuts down the console.", "") },
+			{ "spew",         ("Spews debug output.", "") },
+			{ "threadex",     ("Lists threads in a different format.", "") },
+			{ "whomadethis",  ("Responds with the author of Freeboot XBDM.", "") }
 		};
     }
 }
