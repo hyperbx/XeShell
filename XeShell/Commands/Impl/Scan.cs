@@ -89,9 +89,23 @@ namespace XeShell.Commands.Impl
                             task.Value(e.BytesRead / 2);
                         };
 
-                        return in_console.ReadBytes(currentModule.BaseAddress, (int)total);
+                        try
+                        {
+                            return in_console.ReadBytes(currentModule.BaseAddress, (int)total);
+                        }
+                        catch (OperationCanceledException) // TODO: move this exception handling to the library?
+                        {
+                            in_console.Client.Flush();
+                            return [];
+                        }
                     }
                 );
+            }
+
+            if (_memory.Length <= 0)
+            {
+                XeLogger.Error("Failed to download title image...");
+                return;
             }
 
             var results = ConsoleHelper.StatusCommon($"Scanning for \"{(isByteInput ? param1 : MemoryHelper.ByteArrayToHexString(pattern))}\"...",

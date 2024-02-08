@@ -117,9 +117,10 @@ namespace XeShell
                 return;
             }
 
-            // TODO: allow cancelling operations.
             try
             {
+                Console.CancelKeyPress += Console_CancelKeyPress;
+
                 if (!_client.Ping())
                 {
                     Welcome();
@@ -166,6 +167,10 @@ namespace XeShell
                 XeLogger.Error($"An internal error occurred.\n{out_ex}");
             }
 #endif
+            finally
+            {
+                Console.CancelKeyPress -= Console_CancelKeyPress;
+            }
 
             // User disconnected gracefully.
             if (_gracefulExitCommands.Contains(prompt.ToLower()))
@@ -176,6 +181,12 @@ namespace XeShell
             }
 
             Shell();
+        }
+
+        private static void Console_CancelKeyPress(object? sender, ConsoleCancelEventArgs e)
+        {
+            e.Cancel = true;
+            _client.Cancel();
         }
     }
 }
