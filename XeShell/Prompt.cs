@@ -171,7 +171,7 @@ namespace XeShell
 
                             Column = _prompt.Length + _inputIndex;
 
-                            continue;
+                            break;
                         }
 
                         Console.Write(keyInfo.KeyChar);

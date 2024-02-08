@@ -27,6 +27,7 @@ Command|Alias|Description
 `help`|`?`|Displays help information.
 `info`|`info.`|Displays information about the connected console or specified filesystem node.
 `launch`||Launches the specified executable binary.
+`mkdir`||Creates a remote directory.
 `peek`||Reads data from a memory address and prints it.
 `peekfile`|`peekf`|Reads data from a file and prints it.
 `poke`||Writes data to a virtual address.
