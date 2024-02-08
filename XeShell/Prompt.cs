@@ -5,8 +5,8 @@ namespace XeShell
 {
     public class Prompt
     {
-        private static readonly string _defaultPrompt = "> ";
-        private static string _prompt = _defaultPrompt;
+        private const string _defaultPrompt = "> ";
+        private static string _prompt;
 
         private static readonly List<string> _history = new(50);
         private static int _historyIndex = -1;
@@ -14,10 +14,54 @@ namespace XeShell
         private static StringBuilder _input;
         private static int _inputIndex = 0;
 
-        public static int Seek
+        public static int Column
         {
             get => Console.GetCursorPosition().Left;
-            set => Console.SetCursorPosition(value, Console.GetCursorPosition().Top);
+
+            set
+            {
+                if (value >= Console.BufferWidth)
+                {
+                    // Get remaining columns from wrapped text.
+                    var remainder = value % Console.BufferWidth;
+
+                    value = remainder <= 0
+                        ? Console.BufferWidth - 1
+                        : remainder;
+                }
+
+                Console.SetCursorPosition(value, Row);
+            }
+        }
+
+        public static int Row
+        {
+            get => Console.GetCursorPosition().Top;
+
+            set
+            {
+                if (value >= Console.BufferHeight)
+                {
+                    var diff = value - Console.BufferHeight;
+
+                    try
+                    {
+                        // Resize console buffer height to account for wrapped text.
+                        Console.MoveBufferArea(Column, Row, Console.BufferWidth, Console.BufferHeight, Column, Row - diff);
+                        return;
+                    }
+                    catch
+                    {
+                        // Just in case Console.MoveBufferArea has a heart attack.
+                        for (int i = 0; i < diff; i++)
+                            Console.WriteLine();
+
+                        value = Console.BufferHeight - 1;
+                    }
+                }
+
+                Console.SetCursorPosition(Console.GetCursorPosition().Left, value);
+            }
         }
 
         public static T Show<T>(string in_prompt = "")
@@ -30,7 +74,7 @@ namespace XeShell
 
             Console.Write(_prompt = in_prompt);
 
-            return MemoryHelper.ChangeType<T>(GetInput());
+            return MemoryHelper.ChangeType<T>(ReadInput());
         }
 
         public static string Show(string in_prompt = "")
@@ -38,7 +82,7 @@ namespace XeShell
             return Show<string>(in_prompt);
         }
 
-        private static string GetInput()
+        private static string ReadInput()
         {
             _input = new StringBuilder();
 
@@ -48,37 +92,93 @@ namespace XeShell
             {
                 keyInfo = Console.ReadKey(true);
 
-                if (keyInfo.Key == ConsoleKey.Backspace && _input.Length > 0)
+                switch (keyInfo.Key)
                 {
-                    SeekPosition(-1);
-
-                    _input.Remove(_inputIndex, 1);
-
-                    Console.Write("\b \b");
-                }
-                else if (!char.IsControl(keyInfo.KeyChar))
-                {
-                    _input.Insert(_inputIndex, keyInfo.KeyChar);
-
-                    SeekPosition(1);
-
-                    // Rewrite prompt if we're seeked in the middle of the input.
-                    if (_input.Length > _inputIndex)
+                    case ConsoleKey.Backspace:
                     {
-                        ClearInput();
-                        Console.Write(_input.ToString());
-                        Seek = _prompt.Length + _inputIndex;
-                        continue;
+                        if (_input.Length <= 0)
+                            break;
+
+                        SeekCursor(-1);
+                        SeekInput(-1);
+
+                        Column++;
+
+                        _input.Remove(_inputIndex, 1);
+
+                        Console.Write("\b \b");
+
+                        break;
                     }
 
-                    Console.Write(keyInfo.KeyChar);
+                    case ConsoleKey.Delete:
+                    {
+                        if (_input.Length <= _inputIndex)
+                            break;
+
+                        var oldColumn = Column;
+
+                        ClearInput();
+
+                        _input.Remove(_inputIndex, 1);
+
+                        Console.Write(_input.ToString());
+
+                        Column = oldColumn;
+
+                        break;
+                    }
+
+                    case ConsoleKey.UpArrow:
+                    case ConsoleKey.DownArrow:
+                        SeekHistory(keyInfo.Key == ConsoleKey.DownArrow);
+                        break;
+
+                    case ConsoleKey.LeftArrow:
+                    case ConsoleKey.RightArrow:
+                    {
+                        var isLeft = keyInfo.Key == ConsoleKey.LeftArrow;
+
+                        // Keep cursor within the boundaries of the input string.
+                        if ((isLeft && _inputIndex <= 0) || (!isLeft && _inputIndex == _input.Length))
+                            break;
+
+                        _inputIndex = isLeft
+                            ? _inputIndex - 1
+                            : _inputIndex + 1;
+
+                        SeekCursor(isLeft ? -1 : 1);
+
+                        break;
+                    }
+
+                    default:
+                    {
+                        if (char.IsControl(keyInfo.KeyChar))
+                            break;
+
+                        _input.Insert(_inputIndex, keyInfo.KeyChar);
+
+                        SeekInput();
+
+                        // Rewrite prompt if we're in the middle of the input.
+                        // FIXME: this causes flickering. ¯\_(ツ)_/¯
+                        if (_input.Length > _inputIndex)
+                        {
+                            ClearInput();
+
+                            Console.Write(_input.ToString());
+
+                            Column = _prompt.Length + _inputIndex;
+
+                            continue;
+                        }
+
+                        Console.Write(keyInfo.KeyChar);
+
+                        break;
+                    }
                 }
-
-                if (keyInfo.Key is ConsoleKey.UpArrow or ConsoleKey.DownArrow)
-                    SeekHistory(keyInfo.Key == ConsoleKey.DownArrow);
-
-                if (keyInfo.Key is ConsoleKey.LeftArrow or ConsoleKey.RightArrow)
-                    SeekPosition(keyInfo.Key == ConsoleKey.RightArrow ? 1 : -1, true);
             }
             while (keyInfo.Key != ConsoleKey.Enter);
 
@@ -99,31 +199,64 @@ namespace XeShell
 
         private static void ClearInput()
         {
-            Seek = _prompt.Length + _input.Length;
+            Column = _prompt.Length + (_input.Length >= Console.BufferWidth
+                ? _input.Length % Console.BufferWidth + 1
+                : _input.Length);
 
             for (int i = 0; i < _input.Length; i++)
+            {
+                /* Back up to previous row once we've
+                   reached the left edge of the console. */
+                if (Column <= 0)
+                    SeekCursor(-1);
+
                 Console.Write("\b \b");
+            }
         }
 
-        private static void SeekPosition(int in_relativePosition, bool in_isSeekConsole = false)
+        private static void SeekCursor(int in_amount = 1)
         {
-            if (in_relativePosition > 0)
-            {
-                _inputIndex = Math.Min(_input.Length, _inputIndex + in_relativePosition);
-            }
-            else
-            {
-                _inputIndex = Math.Max(0, _inputIndex - Math.Abs(in_relativePosition));
-            }
-
-            if (!in_isSeekConsole)
+            if (in_amount == 0)
                 return;
 
-            // Keep cursor within the boundaries of post-prompt length and pre-input length.
-            var newPos = Math.Max(_prompt.Length,
-                Math.Min(_prompt.Length + _input.Length, Seek + in_relativePosition));
+            for (int i = 0; i < Math.Abs(in_amount); i++)
+            {
+                var isLeft = in_amount < 0;
+                var (column, row) = Console.GetCursorPosition();
 
-            Seek = newPos;
+                if (isLeft)
+                {
+                    column--;
+
+                    if (column < 0)
+                    {
+                        column = Console.BufferWidth - 1;
+                        row -= 1;
+                    }
+                }
+                else
+                {
+                    column++;
+
+                    if (column >= Console.BufferWidth)
+                    {
+                        column = 0;
+                        row += 1;
+                    }
+                }
+
+                Console.SetCursorPosition(column, row);
+            }
+        }
+
+        private static void SeekInput(int in_amount = 1)
+        {
+            for (int i = 0; i < Math.Abs(in_amount); i++)
+            {
+                _inputIndex = in_amount < 0
+                    ? _inputIndex - 1
+                    : _inputIndex + 1;
+            }
         }
 
         private static void SeekHistory(bool in_isDown = false)
@@ -146,7 +279,7 @@ namespace XeShell
 
             Console.Write(_input.ToString());
 
-            Seek = _prompt.Length + _inputIndex;
+            Column = _prompt.Length + _input.Length;
         }
     }
 }

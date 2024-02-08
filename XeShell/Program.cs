@@ -98,7 +98,7 @@ namespace XeShell
 
             Console.WriteLine();
 
-            var prompt = Prompt.Show($"{_console.FileSystem.CurrentDirectory}>");
+            var prompt = Prompt.Show($"{_console.FileSystem.CurrentDirectory}> ");
 
             if (prompt.IsNullOrEmptyOrWhiteSpace())
             {
