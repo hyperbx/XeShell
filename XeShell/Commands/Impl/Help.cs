@@ -20,7 +20,7 @@ namespace XeShell.Commands.Impl
 					XeLogger.Log($"{(isUsage || isDeprecated ? "┬" : "-")} {entry.Key}: " +
 						entry.Value.Description.Replace("\n", $"\n│{new string(' ', entry.Key.Length + 3)}"));
 
-					void CreateBranch(string in_name, string in_value, ConsoleColor in_colour, bool in_isLast = true)
+					static void CreateBranch(string in_name, string in_value, ConsoleColor in_colour, bool in_isLast = true)
 					{
 						var branch = in_isLast
 							? '└'
@@ -49,11 +49,11 @@ namespace XeShell.Commands.Impl
 				}
 			}
 
-			PrintDefinitions("XeShell commands", _xeDefinitions);
-			PrintDefinitions("XBDM commands", _xbdmDefinitions);
+			PrintDefinitions("XeShell commands", _xeShellDefinitions);
+			PrintDefinitions("Available XBDM commands", _xbdmDefinitions);
 
 			if (in_console.Client.Info.IsFreebootXBDM)
-				PrintDefinitions("Freeboot XBDM commands", _xbdmExDefinitions);
+				PrintDefinitions("Freeboot XBDM commands", _freebootXbdmDefinitions);
         }
 
         public bool ExecuteRaw(string[] in_args, XeDbgConsole in_console)
@@ -61,7 +61,7 @@ namespace XeShell.Commands.Impl
             return false;
         }
 		
-		private Dictionary<string, (string Description, string Usage, string Deprecated)> _xeDefinitions = new()
+		private Dictionary<string, (string Description, string Usage, string Deprecated)> _xeShellDefinitions = new()
 		{
 			{ "cd/cd..",        ("changes to the specified directory.", "cd [path]\nDrives can be changed into without invoking the command.", "") },
 			{ "cls/clear",      ("clears the command prompt.", "", "") },
@@ -137,7 +137,7 @@ namespace XeShell.Commands.Impl
 			{ "walkmem",           ("lists memory and protection pages.", "", "") }
 		};
 
-		private Dictionary<string, (string Description, string Usage, string Deprecated)> _xbdmExDefinitions = new()
+		private Dictionary<string, (string Description, string Usage, string Deprecated)> _freebootXbdmDefinitions = new()
 		{
 			{ "getcpukey",    ("gets the CPU key.", "", "") },
 			{ "getexecstate", ("displays the execution state.", "", "") },

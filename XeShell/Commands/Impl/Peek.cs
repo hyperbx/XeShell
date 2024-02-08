@@ -15,9 +15,16 @@ namespace XeShell.Commands.Impl
             if (in_command.Inputs.Count > 1)
                 len = (int)in_command.Inputs[1];
 
-            XeLogger.Log($"Peeking {len} bytes at 0x{addr:X}...\n");
+            var result = in_console.ReadBytes(addr, len);
 
-            MemoryHelper.PrintBytes(in_console.ReadBytes(addr, len), addr);
+            if (result.Length <= 0)
+            {
+                XeLogger.Error("Access denied.");
+                return;
+            }
+
+            XeLogger.Log($"Peeking {len} bytes at 0x{addr:X}...\n");
+            MemoryHelper.PrintBytes(result, addr);
         }
 
         public bool ExecuteRaw(string[] in_args, XeDbgConsole in_console)
