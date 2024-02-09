@@ -2,7 +2,6 @@
 using XeSharp.Device;
 using XeSharp.Helpers;
 using XeSharp.Logger;
-using XeSharp.Net.Sockets;
 using XeShell.Commands;
 using XeShell.Commands.Impl;
 using XeShell.Exceptions;
@@ -12,6 +11,8 @@ namespace XeShell
 {
     public class Program
     {
+        protected static XeDbgConsole _console;
+
 #if !DEBUG
         private const string _programName = "XeShell";
 #else
@@ -24,9 +25,6 @@ namespace XeShell
             "magicboot cold", // """graceful"""
             "shutdown"
         ];
-
-        protected static XeDbgClient _client;
-        protected static XeDbgConsole _console;
 
         static void Main(string[] in_args = null)
         {
@@ -81,15 +79,13 @@ namespace XeShell
                     try
 #endif
                     {
-                        _client  = new XeDbgClient(in_hostName);
-                        _console = new XeDbgConsole(_client, in_isFullFileSystemMap: false);
+                        _console = new XeDbgConsole(in_hostName, in_isFullFileSystemMap: false);
 
                         return true;
                     }
 #if !DEBUG
                     catch
                     {
-                        _client  = null;
                         _console = null;
 
                         return false;
@@ -104,7 +100,7 @@ namespace XeShell
             if (in_isInitial)
             {
                 Welcome();
-                XeLogger.Log($"\nConnected to \"{_client.HostName}\".\n\n{_console.Info}");
+                XeLogger.Log($"\nConnected to \"{_console.Client.HostName}\".\n\n{_console.Info}");
             }
 
             Console.WriteLine();
@@ -121,7 +117,7 @@ namespace XeShell
             {
                 Console.CancelKeyPress += Console_CancelKeyPress;
 
-                if (!_client.Ping())
+                if (!_console.Client.Ping())
                 {
                     Welcome();
                     Error("\nConnection to the server has been lost...");
@@ -131,7 +127,7 @@ namespace XeShell
                 // Intercept unimplemented XBDM commands with our own.
                 if (!CommandProcessor.ExecuteArguments(prompt, _console))
                 {
-                    var response = _client.SendCommand(prompt, false)
+                    var response = _console.Client.SendCommand(prompt, false)
                         ?? throw new HttpIOException(HttpRequestError.InvalidResponse, "The server response returned null.");
 
                     if (response.Results?.Length > 0)
@@ -175,7 +171,7 @@ namespace XeShell
             // User disconnected gracefully.
             if (_gracefulExitCommands.Contains(prompt.ToLower()))
             {
-                _client?.Dispose();
+                _console.Client?.Dispose();
                 Main();
                 return;
             }
@@ -186,7 +182,7 @@ namespace XeShell
         private static void Console_CancelKeyPress(object? sender, ConsoleCancelEventArgs e)
         {
             e.Cancel = true;
-            _client.Cancel();
+            _console.Client.Cancel();
         }
     }
 }
