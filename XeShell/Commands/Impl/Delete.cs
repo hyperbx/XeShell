@@ -37,5 +37,7 @@ namespace XeShell.Commands.Impl
         {
             return false;
         }
+
+        public void Dispose() { }
     }
 }

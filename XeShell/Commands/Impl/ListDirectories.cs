@@ -71,6 +71,8 @@ namespace XeShell.Commands.Impl
             return false;
         }
 
+        public void Dispose() { }
+
         private static void PrintNavigationNodes(XeFileSystemNode in_node)
         {
             var fmt = $"{in_node.DateModified:dd/MM/yyyy  hh:mm tt}\t<DIR>          .";

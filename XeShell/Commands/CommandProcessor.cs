@@ -135,5 +135,11 @@ namespace XeShell.Commands
 
             return result;
         }
+
+        public static void DisposeCommands()
+        {
+            foreach (var command in Commands)
+                (Activator.CreateInstance(command.Value) as ICommand)?.Dispose();
+        }
     }
 }

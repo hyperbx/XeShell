@@ -22,5 +22,7 @@ namespace XeShell.Commands.Impl
 
             return true;
         }
+
+        public void Dispose() { }
     }
 }

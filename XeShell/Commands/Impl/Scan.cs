@@ -136,5 +136,11 @@ namespace XeShell.Commands.Impl
         {
             return false;
         }
+
+        public void Dispose()
+        {
+            _lastScannedModule = null;
+            _memory = null;
+        }
     }
 }

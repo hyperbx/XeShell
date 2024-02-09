@@ -9,7 +9,6 @@ namespace XeShell.Commands.Impl
     [Command("poke", Inputs = [ typeof(uint), typeof(string) ], OptionalInputs = [ typeof(string) ])]
     public class Poke : ICommand
     {
-        // TODO: maybe move this into XeSharp?
         public static Dictionary<uint, byte[]> History = [];
 
         public void Execute(List<Command> in_commands, Command in_command, XeDbgConsole in_console)
@@ -106,6 +105,11 @@ namespace XeShell.Commands.Impl
         public bool ExecuteRaw(string[] in_args, XeDbgConsole in_console)
         {
             return false;
+        }
+
+        public void Dispose()
+        {
+            History.Clear();
         }
     }
 }

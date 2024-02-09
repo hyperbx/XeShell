@@ -48,8 +48,7 @@ namespace XeShell
                 return;
             }
 
-            // TODO: set up command callbacks.
-            Poke.History.Clear();
+            CommandProcessor.DisposeCommands();
 
             Shell(true);
         }
