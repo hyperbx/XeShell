@@ -96,7 +96,7 @@ namespace XeShell
                 {
                     case ConsoleKey.Backspace:
                     {
-                        if (_input.Length <= 0)
+                        if (_input.Length <= 0 || _inputIndex <= 0)
                             break;
 
                         SeekCursor(-1);
@@ -104,7 +104,11 @@ namespace XeShell
 
                         Column++;
 
-                        _input.Remove(_inputIndex, 1);
+                        if (_input.Length > _inputIndex)
+                        {
+                            Refresh(() => _input.Remove(_inputIndex, 1));
+                            break;
+                        }
 
                         Console.Write("\b \b");
 
@@ -118,11 +122,7 @@ namespace XeShell
 
                         var oldColumn = Column;
 
-                        ClearInput();
-
-                        _input.Remove(_inputIndex, 1);
-
-                        Console.Write(_input.ToString());
+                        Refresh(() => _input.Remove(_inputIndex, 1));
 
                         Column = oldColumn;
 
@@ -161,16 +161,9 @@ namespace XeShell
 
                         SeekInput();
 
-                        // Rewrite prompt if we're in the middle of the input.
-                        // FIXME: this causes flickering. ¯\_(ツ)_/¯
                         if (_input.Length > _inputIndex)
                         {
-                            ClearInput();
-
-                            Console.Write(_input.ToString());
-
-                            Column = _prompt.Length + _inputIndex;
-
+                            Refresh();
                             break;
                         }
 
@@ -195,6 +188,19 @@ namespace XeShell
             _inputIndex = 0;
 
             return result;
+        }
+
+        // FIXME: this causes flickering. ¯\_(ツ)_/¯
+        public static void Refresh(Action in_postClearCallback = null)
+        {
+            ClearInput();
+
+            if (in_postClearCallback != null)
+                in_postClearCallback();
+
+            Console.Write(_input.ToString());
+
+            Column = _prompt.Length + _inputIndex;
         }
 
         private static void ClearInput()
