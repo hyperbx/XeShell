@@ -13,8 +13,7 @@ namespace XeShell.Commands.Impl
             var serverPath = (string)in_command.Inputs[0];
             var localPath = (string)in_command.Inputs[1];
 
-            var node = in_console.FileSystem.GetNodeFromPath(serverPath) ??
-                in_console.FileSystem.GetDirectoryFromPath(serverPath);
+            var node = in_console.FileSystem.GetNodeFromPath(serverPath);
 
             var fileCount = node.GetTotalNodes(true, false);
             var fileIndex = 0;

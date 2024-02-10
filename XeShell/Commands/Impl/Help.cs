@@ -96,7 +96,7 @@ namespace XeShell.Commands.Impl
             { "delete",            ("deletes a file or directory.", "delete name=[path] [opt: dir]", "use the del command.") },
             { "dirlist",           ("gets a list of items in a folder.", "dirlist name=[path]", "use the dir command.") },
             { "dmversion",         ("gets the debugger version.", "", "") },
-            { "drivefreespace",    ("gets some stats about the drive's volume size.", "", "") },
+            { "drivefreespace",    ("gets some stats about the drive's volume size.", "", "use the dir or info commands.") },
             { "drivelist",         ("gets the list of connected drives.", "", "use the dir command.") },
             { "drivemap",          ("sets if FLASH:\\ is visible in the drive browser.", "", "use the dir command.") },
             { "dumpmode",          ("configures the crash dump mode.", "", "") },

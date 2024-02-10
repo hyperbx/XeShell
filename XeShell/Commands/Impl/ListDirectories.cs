@@ -14,7 +14,7 @@ namespace XeShell.Commands.Impl
 
             var dir = isCurrentDir
                 ? in_console.FileSystem.CurrentDirectory
-                : in_console.FileSystem.GetDirectoryFromPath(path);
+                : in_console.FileSystem.GetNodeFromPath(path);
 
             XeFileSystemDrive drive = null;
 

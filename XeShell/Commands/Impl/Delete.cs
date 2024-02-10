@@ -18,8 +18,7 @@ namespace XeShell.Commands.Impl
                 return;
             }
 
-            var node = in_console.FileSystem.GetNodeFromPath(path) ??
-                in_console.FileSystem.GetDirectoryFromPath(path);
+            var node = in_console.FileSystem.GetNodeFromPath(path);
 
             if (node == null)
                 return;
