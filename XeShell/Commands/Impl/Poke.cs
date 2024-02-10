@@ -9,7 +9,7 @@ namespace XeShell.Commands.Impl
     [Command("poke", Inputs = [ typeof(uint), typeof(string) ], OptionalInputs = [ typeof(string) ])]
     public class Poke : ICommand
     {
-        public static Dictionary<uint, byte[]> History = [];
+        public static Dictionary<uint, List<byte[]>> History = [];
 
         public void Execute(List<Command> in_commands, Command in_command, XeDbgConsole in_console)
         {
@@ -49,27 +49,13 @@ namespace XeShell.Commands.Impl
 
             byte[] originalData = len == 0 ? [] : in_console.ReadBytes(addr, len);
 
-            // Preserve data for undoing.
-            // TODO: stackable undo history.
-            if (History.TryGetValue(addr, out byte[]? out_originalData))
+            if (History.ContainsKey(addr))
             {
-                if (out_originalData.Length < len)
-                {
-                    var bytes = out_originalData.ToList();
-
-                    // Append unmodified bytes to the current original bytes.
-                    bytes.AddRange(in_console.ReadBytes((uint)(addr + out_originalData.Length), len - (uint)out_originalData.Length));
-
-                    History[addr] = [.. bytes];
-                }
-                else if (out_originalData.Length == len)
-                {
-                    History[addr] = in_console.ReadBytes(addr, len);
-                }
+                History[addr].Insert(0, originalData);
             }
             else
             {
-                History.Add(addr, originalData);
+                History.Add(addr, [originalData]);
             }
 
             // Write data.

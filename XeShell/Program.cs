@@ -79,14 +79,12 @@ namespace XeShell
 #endif
                     {
                         _console = new XeDbgConsole(in_hostName, in_isFullFileSystemMap: false);
-
                         return true;
                     }
 #if !DEBUG
                     catch
                     {
                         _console = null;
-
                         return false;
                     }
 #endif

@@ -14,20 +14,20 @@ namespace XeShell.Commands.Impl
             if (addr == 0 && Poke.History.Count > 0)
                 addr = Poke.History.Keys.ElementAt(Poke.History.Count - 1);
 
-            if (!Poke.History.ContainsKey(addr))
+            if (!Poke.History.ContainsKey(addr) || Poke.History[addr].Count <= 0)
             {
                 XeLogger.Log("Nothing to undo" + (addr == 0 ? "" : $" at 0x{addr:X}") + "...");
                 return;
             }
 
-            var undo = Poke.History[addr];
+            var undo = Poke.History[addr][0];
             var len  = (uint)undo.Length;
 
             in_console.WriteBytes(addr, undo);
 
             XeLogger.Log($"Undone {len} bytes at 0x{addr:X}...\n");
 
-            Poke.History.Remove(addr);
+            Poke.History[addr].RemoveAt(0);
 
             MemoryHelper.PrintBytes(in_console.ReadBytes(addr, len), addr);
         }
