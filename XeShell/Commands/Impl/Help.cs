@@ -95,7 +95,7 @@ namespace XeShell.Commands.Impl
             { "debugger",          ("signals that a debugger has been attached or deattached.", "", "") },
             { "delete",            ("deletes a file or directory.", "delete name=[path] [opt: dir]", "use the del command.") },
             { "dirlist",           ("gets a list of items in a folder.", "dirlist name=[path]", "use the dir command.") },
-            { "dmversion",         ("gets the debugger version.", "", "") },
+            { "dmversion",         ("gets the debugger version.", "", "use the info command.") },
             { "drivefreespace",    ("gets some stats about the drive's volume size.", "", "use the dir or info commands.") },
             { "drivelist",         ("gets the list of connected drives.", "", "use the dir command.") },
             { "drivemap",          ("sets if FLASH:\\ is visible in the drive browser.", "", "use the dir command.") },
