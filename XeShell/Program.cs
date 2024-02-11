@@ -3,9 +3,9 @@ using XeSharp.Device;
 using XeSharp.Helpers;
 using XeSharp.Logger;
 using XeShell.Commands;
-using XeShell.Commands.Impl;
 using XeShell.Exceptions;
 using XeShell.Helpers;
+using XeShell.Services;
 
 namespace XeShell
 {
@@ -102,9 +102,12 @@ namespace XeShell
 
             Console.WriteLine();
 
-            var prompt = Prompt.Show($"{_console.FileSystem.CurrentDirectory}> ");
+            var prompt   = new PromptService();
+            var autofill = new AutofillService(_console, prompt);
 
-            if (prompt.IsNullOrEmptyOrWhiteSpace())
+            var input = prompt.Show($"{_console.FileSystem.CurrentDirectory}>");
+
+            if (input.IsNullOrEmptyOrWhiteSpace())
             {
                 Shell();
                 return;
@@ -122,9 +125,9 @@ namespace XeShell
                 }
 
                 // Intercept unimplemented XBDM commands with our own.
-                if (!CommandProcessor.ExecuteArguments(prompt, _console))
+                if (!CommandProcessor.ExecuteArguments(input, _console))
                 {
-                    var response = _console.Client.SendCommand(prompt, false)
+                    var response = _console.Client.SendCommand(input, false)
                         ?? throw new HttpIOException(HttpRequestError.InvalidResponse, "The server response returned null.");
 
                     if (response.Results?.Length > 0)
@@ -139,7 +142,7 @@ namespace XeShell
                         if (response.Status.IsFailed())
                         {
                             if (response.Status.ToHResult() == XeSharp.Net.EXeDbgStatusCode.XBDM_INVALIDCMD)
-                                throw new UnknownCommandException(prompt.Split(' ')[0]);
+                                throw new UnknownCommandException(input.Split(' ')[0]);
 
                             XeLogger.Error(isMessage ? response.Message : response.Status.ToString());
                         }
@@ -166,7 +169,7 @@ namespace XeShell
             }
 
             // User disconnected gracefully.
-            if (_gracefulExitCommands.Contains(prompt.ToLower()))
+            if (_gracefulExitCommands.Contains(input.ToLower()))
             {
                 _console.Client?.Dispose();
                 Main();
