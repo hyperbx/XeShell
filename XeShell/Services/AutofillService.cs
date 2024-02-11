@@ -114,6 +114,8 @@ namespace XeShell.Services
                 {
                     _isInputBuffered = false;
                 }
+
+                Thread.Sleep(20);
             }
         }
     }
