@@ -81,7 +81,7 @@ namespace XeShell.Commands.Impl
             { "peekfile/peekf", ("reads data from a file and prints it.", "peekfile [path] [opt: amount of bytes to read]", "") },
             { "poke",           ("writes data to a virtual address.", "poke [address] [opt: i8/u8/i16/u16/i32/u32/i64/u64/nop/string/wstring] [data]", "") },
             { "scan",           ("scans memory for data.", "scan [opt: i8/u8/i16/u16/i32/u32/i64/u64/string/wstring] [data] [opt: module name]", "") },
-            { "step",           ("steps to the next instruction from the current breakpoint.", "", "") },
+            { "step",           ("steps to the next instruction from the current breakpoint.", "step [opt: thread ID]", "") },
             { "undo",           ("undoes memory changes via the poke command (only works per session).", "undo [opt: address]", "") },
             { "upload/ul",      ("uploads a local file.", "upload [local source] [remote destination]", "") },
             { "xcpu",           ("dumps the current CPU state.", "xcpu [opt: thread ID]", "") }
