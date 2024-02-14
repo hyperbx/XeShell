@@ -7,6 +7,7 @@ A command prompt that interfaces with Freeboot XBDM on a remote Xbox 360.
 - Peeking and poking memory.
 - Peeking file data.
 - Signature scanning.
+- Debugging.
 
 # Prerequisites
 ### Running
@@ -19,9 +20,11 @@ A command prompt that interfaces with Freeboot XBDM on a remote Xbox 360.
 
 Command|Alias|Description
 -------|-----|-----------
+`attach`||Attaches the debugger to the console.
 `cd`|`cd..`|Changes to the specified directory.
 `cls`|`clear`|Clears the command prompt.
 `del`|`rm`|Deletes a remote file or directory.
+`detach`||Detaches the debugger from the console.
 `dir`|`ls`|Lists the current or specified directory's contents.
 `download`|`dl`|Downloads a remote file.
 `exit`||Exits the command prompt.
@@ -33,7 +36,9 @@ Command|Alias|Description
 `peekfile`|`peekf`|Reads data from a file and prints it.
 `poke`||Writes data to a virtual address.
 `scan`||Scans memory for data.
+`step`||Steps to the next instruction from the current breakpoint.
 `undo`||Undoes memory changes via the `poke` command (only works per session).
 `upload`|`ul`|Uploads a file.
+`xcpu`||Dumps the current CPU state.
 
 ***See the `help` command for additional information.***
