@@ -11,7 +11,7 @@ namespace XeShell.Commands.Impl
     {
         public static Dictionary<uint, List<byte[]>> History = [];
 
-        public void Execute(List<Command> in_commands, Command in_command, XeDbgConsole in_console)
+        public void Execute(List<Command> in_commands, Command in_command, XeConsole in_console)
         {
             var addr = (uint)in_command.Inputs[0];
             var len = 0U;
@@ -19,7 +19,7 @@ namespace XeShell.Commands.Impl
             var param1 = (string)in_command.Inputs[1];
             var param2 = in_command.Inputs.Count > 2 ? (string)in_command.Inputs[2] : null;
 
-            var response = new XeDbgResponse();
+            var response = new XeResponse();
 
             // Used for byte array input.
             byte[] data = [];
@@ -88,7 +88,7 @@ namespace XeShell.Commands.Impl
             MemoryHelper.PrintBytes(in_console.ReadBytes(addr, len), addr);
         }
 
-        public bool ExecuteRaw(string[] in_args, XeDbgConsole in_console)
+        public bool ExecuteRaw(string[] in_args, XeConsole in_console)
         {
             return false;
         }

@@ -11,7 +11,7 @@ namespace XeShell
 {
     public class Program
     {
-        protected static XeDbgConsole _console;
+        protected static XeConsole _console;
 
 #if !DEBUG
         private const string _programName = "XeShell";
@@ -48,6 +48,7 @@ namespace XeShell
                 return;
             }
 
+            PromptService.History.Clear();
             CommandProcessor.DisposeCommands();
 
             Shell(true);
@@ -78,7 +79,7 @@ namespace XeShell
                     try
 #endif
                     {
-                        _console = new XeDbgConsole(in_hostName, in_isFullFileSystemMap: false);
+                        _console = new XeConsole(in_hostName, in_isFullFileSystemMap: false);
                         return true;
                     }
 #if !DEBUG
@@ -141,7 +142,7 @@ namespace XeShell
 
                         if (response.Status.IsFailed())
                         {
-                            if (response.Status.ToHResult() == XeSharp.Net.EXeDbgStatusCode.XBDM_INVALIDCMD)
+                            if (response.Status.ToHResult() == XeSharp.Net.EXeStatusCode.XBDM_INVALIDCMD)
                                 throw new UnknownCommandException(input.Split(' ')[0]);
 
                             XeLogger.Error(isMessage ? response.Message : response.Status.ToString());

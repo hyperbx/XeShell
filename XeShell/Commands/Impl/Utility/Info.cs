@@ -6,7 +6,7 @@ namespace XeShell.Commands.Impl
     [Command("info", "info.", OptionalInputs = [ typeof(string) ])]
     public class Info : ICommand
     {
-        public void Execute(List<Command> in_commands, Command in_command, XeDbgConsole in_console)
+        public void Execute(List<Command> in_commands, Command in_command, XeConsole in_console)
         {
             bool isDirInfo = in_command.InvokedName == "info.";
 
@@ -28,7 +28,7 @@ namespace XeShell.Commands.Impl
             XeLogger.Log(node.GetInfo());
         }
 
-        public bool ExecuteRaw(string[] in_args, XeDbgConsole in_console)
+        public bool ExecuteRaw(string[] in_args, XeConsole in_console)
         {
             return false;
         }

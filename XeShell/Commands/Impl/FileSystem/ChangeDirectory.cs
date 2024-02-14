@@ -6,7 +6,7 @@ namespace XeShell.Commands.Impl
     [Command("cd", "cd..", OptionalInputs = [ typeof(string) ])]
     public class ChangeDirectory : ICommand
     {
-        public void Execute(List<Command> in_commands, Command in_command, XeDbgConsole in_console)
+        public void Execute(List<Command> in_commands, Command in_command, XeConsole in_console)
         {
             var dir = in_command.Inputs.Count > 0 ? (string)in_command.Inputs[0] : null;
 
@@ -19,7 +19,7 @@ namespace XeShell.Commands.Impl
             XeLogger.Error("The system cannot find the path specified.");
         }
 
-        public bool ExecuteRaw(string[] in_args, XeDbgConsole in_console)
+        public bool ExecuteRaw(string[] in_args, XeConsole in_console)
         {
             if (in_args.Length <= 0 || !in_args[0].EndsWith(':'))
                 return false;

@@ -7,7 +7,7 @@ namespace XeShell.Commands.Impl
     [Command("dir", "ls", OptionalInputs = [ typeof(string) ])]
     public class ListDirectories : ICommand
     {
-        public void Execute(List<Command> in_commands, Command in_command, XeDbgConsole in_console)
+        public void Execute(List<Command> in_commands, Command in_command, XeConsole in_console)
         {
             var path = in_command.Inputs.Count > 0 ? (string)in_command.Inputs[0] : string.Empty;
             var isCurrentDir = string.IsNullOrEmpty(path);
@@ -66,7 +66,7 @@ namespace XeShell.Commands.Impl
             XeLogger.Log($"\t       {dirCount} Dir(s)" + (drive == null ? "" : $" {string.Format("{0,16}", drive.FreeSpace.ToString("N0"))} bytes free"));
         }
 
-        public bool ExecuteRaw(string[] in_args, XeDbgConsole in_console)
+        public bool ExecuteRaw(string[] in_args, XeConsole in_console)
         {
             return false;
         }

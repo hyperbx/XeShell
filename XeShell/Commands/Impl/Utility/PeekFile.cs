@@ -8,7 +8,7 @@ namespace XeShell.Commands.Impl
     [Command("peekfile", "peekf", Inputs = [ typeof(string) ], OptionalInputs = [ typeof(uint) ])]
     public class PeekFile : ICommand
     {
-        public void Execute(List<Command> in_commands, Command in_command, XeDbgConsole in_console)
+        public void Execute(List<Command> in_commands, Command in_command, XeConsole in_console)
         {
             var path = (string)in_command.Inputs[0];
             var file = in_console.FileSystem.GetNodeFromPath(path);
@@ -29,7 +29,7 @@ namespace XeShell.Commands.Impl
             MemoryHelper.PrintBytes(data.Take((int)len).ToArray());
         }
 
-        public bool ExecuteRaw(string[] in_args, XeDbgConsole in_console)
+        public bool ExecuteRaw(string[] in_args, XeConsole in_console)
         {
             return false;
         }

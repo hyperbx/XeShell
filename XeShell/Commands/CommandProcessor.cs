@@ -112,7 +112,7 @@ namespace XeShell.Commands
 #pragma warning restore CS8603 // Possible null reference return.
         }
 
-        public static bool ExecuteArguments(string in_args, XeDbgConsole in_console)
+        public static bool ExecuteArguments(string in_args, XeConsole in_console)
         {
             var result = false;
             var args = StringHelper.ParseArgs(in_args);

@@ -8,7 +8,7 @@ namespace XeShell.Commands.Impl
     public class Upload : ICommand
     {
         // TODO: support uploading directories.
-        public void Execute(List<Command> in_commands, Command in_command, XeDbgConsole in_console)
+        public void Execute(List<Command> in_commands, Command in_command, XeConsole in_console)
         {
             var localPath = (string)in_command.Inputs[0];
 
@@ -32,7 +32,7 @@ namespace XeShell.Commands.Impl
             );
         }
 
-        public bool ExecuteRaw(string[] in_args, XeDbgConsole in_console)
+        public bool ExecuteRaw(string[] in_args, XeConsole in_console)
         {
             return false;
         }

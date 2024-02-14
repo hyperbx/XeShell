@@ -6,7 +6,7 @@ namespace XeShell.Commands.Impl
     [Command("help", "?")]
     public class Help : ICommand
     {
-        public void Execute(List<Command> in_commands, Command in_command, XeDbgConsole in_console)
+        public void Execute(List<Command> in_commands, Command in_command, XeConsole in_console)
         {
             static void PrintDefinitions(string in_category, Dictionary<string, (string Description, string Usage, string Deprecated)> in_defs)
             {
@@ -56,7 +56,7 @@ namespace XeShell.Commands.Impl
                 PrintDefinitions("Freeboot XBDM commands", _freebootXbdmDefinitions);
         }
 
-        public bool ExecuteRaw(string[] in_args, XeDbgConsole in_console)
+        public bool ExecuteRaw(string[] in_args, XeConsole in_console)
         {
             return false;
         }
@@ -65,9 +65,11 @@ namespace XeShell.Commands.Impl
 
         private Dictionary<string, (string Description, string Usage, string Deprecated)> _xeShellDefinitions = new()
         {
+            { "attach",         ("attaches the debugger to the console.", "", "") },
             { "cd/cd..",        ("changes to the specified directory.", "cd [path]\nDrives can be changed into without invoking the command.", "") },
             { "cls/clear",      ("clears the command prompt.", "", "") },
             { "del/rm",         ("deletes a remote file or directory.", "del [remote path]", "") },
+            { "detach",         ("detaches the debugger from the console.", "", "") },
             { "dir/ls",         ("lists the current or specified directory's contents.", "dir [opt: path]", "") },
             { "download/dl",    ("downloads a remote file.", "download [remote source] [local destination]", "") },
             { "exit",           ("exits the command prompt.", "", "") },
@@ -79,8 +81,10 @@ namespace XeShell.Commands.Impl
             { "peekfile/peekf", ("reads data from a file and prints it.", "peekfile [path] [opt: amount of bytes to read]", "") },
             { "poke",           ("writes data to a virtual address.", "poke [address] [opt: i8/u8/i16/u16/i32/u32/i64/u64/nop/string/wstring] [data]", "") },
             { "scan",           ("scans memory for data.", "scan [opt: i8/u8/i16/u16/i32/u32/i64/u64/string/wstring] [data] [opt: module name]", "") },
+            { "step",           ("steps to the next instruction from the current breakpoint.", "", "") },
             { "undo",           ("undoes memory changes via the poke command (only works per session).", "undo [opt: address]", "") },
-            { "upload/ul",      ("uploads a local file.", "upload [local source] [remote destination]", "") }
+            { "upload/ul",      ("uploads a local file.", "upload [local source] [remote destination]", "") },
+            { "xcpu",           ("dumps the current CPU state.", "xcpu [opt: thread ID]", "") }
         };
 
         private Dictionary<string, (string Description, string Usage, string Deprecated)> _xbdmDefinitions = new()
@@ -92,7 +96,7 @@ namespace XeShell.Commands.Impl
             { "consoletype",       ("gets the console type.", "", "use the info command.") },
             { "continue",          ("continues a thread.", "continue thread=[id]", "") },
             { "dbgname",           ("gets the console name.", "", "use the info command.") },
-            { "debugger",          ("signals that a debugger has been attached or deattached.", "", "") },
+            { "debugger",          ("signals that a debugger has been attached or detached.", "", "use the attach and detach commands.") },
             { "delete",            ("deletes a file or directory.", "delete name=[path] [opt: dir]", "use the del command.") },
             { "dirlist",           ("gets a list of items in a folder.", "dirlist name=[path]", "use the dir command.") },
             { "dmversion",         ("gets the debugger version.", "", "use the info command.") },
@@ -102,7 +106,7 @@ namespace XeShell.Commands.Impl
             { "dumpmode",          ("configures the crash dump mode.", "", "") },
             { "dvdeject",          ("ejects the DVD drive.", "", "") },
             { "getconsoleid",      ("gets the console ID.", "", "use the info command.") },
-            { "getcontext",        ("gets a thread's context.", "", "") },
+            { "getcontext",        ("gets a thread's context.", "", "use the xcpu command.") },
             { "getfile",           ("downloads a remote file.", "", "use the download command.") },
             { "getfileattributes", ("gets a file's attributes.", "", "") },
             { "getmem",            ("reads memory at a virtual address and returns its data.", "getmem addr=[address] length=[amount of bytes to read]", "use the peek command.") },

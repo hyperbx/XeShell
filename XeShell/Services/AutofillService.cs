@@ -7,7 +7,7 @@ namespace XeShell.Services
 {
     public class AutofillService
     {
-        protected XeDbgConsole _console;
+        protected XeConsole _console;
         protected PromptService _promptService;
 
         private bool _isInputBuffered = false;
@@ -21,7 +21,7 @@ namespace XeShell.Services
         /// </summary>
         /// <param name="in_console">The console to pull the filesystem from.</param>
         /// <param name="in_promptService">The prompt service to manipulate.</param>
-        public AutofillService(XeDbgConsole in_console, PromptService in_promptService)
+        public AutofillService(XeConsole in_console, PromptService in_promptService)
         {
             _console = in_console;
             _promptService = in_promptService;

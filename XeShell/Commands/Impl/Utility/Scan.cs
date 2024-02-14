@@ -14,7 +14,7 @@ namespace XeShell.Commands.Impl
         private static XeModuleInfo _lastScannedModule;
         private static byte[] _memory;
 
-        public void Execute(List<Command> in_commands, Command in_command, XeDbgConsole in_console)
+        public void Execute(List<Command> in_commands, Command in_command, XeConsole in_console)
         {
             var modules = in_console.GetModules();
 
@@ -132,7 +132,7 @@ namespace XeShell.Commands.Impl
                 XeLogger.Log($"- 0x{result:X}");
         }
 
-        public bool ExecuteRaw(string[] in_args, XeDbgConsole in_console)
+        public bool ExecuteRaw(string[] in_args, XeConsole in_console)
         {
             return false;
         }
