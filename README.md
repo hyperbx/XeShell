@@ -1,5 +1,5 @@
 # XeShell
-A command prompt that interfaces with Freeboot XBDM on a remote Xbox 360.
+A command prompt that interfaces with XBDM on a remote Xbox 360.
 
 # Features
 - DOS-like filesystem navigation and manipulation.
@@ -10,10 +10,13 @@ A command prompt that interfaces with Freeboot XBDM on a remote Xbox 360.
 - Debugging.
 
 # Prerequisites
-### Running
-- .NET 8.0 Runtime ([x86](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-8.0.1-windows-x86-installer), [x64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-8.0.1-windows-x64-installer))
 ### Building
 - [.NET 8.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+
+### Running
+- .NET 8.0 Runtime ([x86](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-8.0.1-windows-x86-installer), [x64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-8.0.1-windows-x64-installer))
+- Xbox 360 hardware (JTAG/RGH/DevKit) with a network connection
+- Xbox Debug Monitor (XBDM) - *only the Freeboot plugin tested and working, but it should be interoperable with the official XBDM module.*
 
 # Commands
 **XeShell** includes all existing XBDM commands (including custom commands from Freeboot XBDM), as well as extended commands listed below.
