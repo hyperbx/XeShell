@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using XeSharp.Debug;
 using XeSharp.Device;
 using XeSharp.Helpers;
 using XeSharp.Logger;
@@ -6,20 +7,49 @@ using XeSharp.Net;
 
 namespace XeShell.Commands.Impl
 {
-    [Command("poke", Inputs = [ typeof(uint), typeof(string) ], OptionalInputs = [ typeof(string) ])]
+    [Command("poke", Inputs = [ typeof(string), typeof(string) ], OptionalInputs = [ typeof(string) ])]
     public class Poke : ICommand
     {
         public static Dictionary<uint, List<byte[]>> History = [];
 
         public void Execute(List<Command> in_commands, Command in_command, XeConsole in_console)
         {
-            var addr = (uint)in_command.Inputs[0];
+            var source = (string)in_command.Inputs[0];
+            var isRegister = source.ToLower().StartsWith("gpr") ||
+                source.ToLower().StartsWith("fpr");
+
+            var addr = 0U;
             var len = 0U;
 
             var param1 = (string)in_command.Inputs[1];
             var param2 = in_command.Inputs.Count > 2 ? (string)in_command.Inputs[2] : null;
 
             var response = new XeResponse();
+
+            // Handle registers.
+            if (isRegister)
+            {
+                using var processor = new XeDebugger(in_console).GetProcessorToken();
+
+                if (!processor.TryParseRegisterIndexByName(source, out var out_index))
+                    return;
+
+                if (source.ToLower().StartsWith("gpr"))
+                {
+                    processor.GPR[out_index] = MemoryHelper.ChangeType<ulong>(param1);
+                }
+                else if (source.ToLower().StartsWith("fpr"))
+                {
+                    processor.FPR[out_index] = MemoryHelper.ChangeType<double>(param1);
+                }
+
+                return;
+            }
+            else
+            {
+                // Assume address.
+                addr = MemoryHelper.ChangeType<uint>(source);
+            }
 
             // Used for byte array input.
             byte[] data = [];

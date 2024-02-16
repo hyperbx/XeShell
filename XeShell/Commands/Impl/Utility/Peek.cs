@@ -28,9 +28,9 @@ namespace XeShell.Commands.Impl
 
                     default:
                     {
-                        if (register.StartsWith("gpr") && int.TryParse(register[3..], out int out_registerIndex))
+                        if (processor.TryParseGPRByName(register, out var out_gpr))
                         {
-                            addr = (uint)processor.GPR[out_registerIndex];
+                            addr = (uint)out_gpr;
                             break;
                         }
 
