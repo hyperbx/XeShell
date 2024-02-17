@@ -13,17 +13,15 @@ namespace XeShell.Commands.Impl
                 ? (int)in_command.Inputs[0]
                 : XeConsole.MainThreadID;
 
-            using (var debugger = new XeDebugger(in_console))
-            {
-                if (!debugger.IsStopped())
-                {
-                    XeLogger.Error("The thread must be stopped in order to step into the next instruction.");
-                    return;
-                }
+            var debugger = new XeDebugger(in_console);
 
-                XeLogger.Log($"Stepping into: 0x{debugger.StepInto(threadID).IAR:X8}");
+            if (!debugger.IsStopped())
+            {
+                XeLogger.Error("The thread must be stopped in order to step into the next instruction.");
+                return;
             }
 
+            XeLogger.Log($"Stepping into: 0x{debugger.StepInto(threadID).IAR:X8}");
         }
 
         public bool ExecuteRaw(string[] in_args, XeConsole in_console)

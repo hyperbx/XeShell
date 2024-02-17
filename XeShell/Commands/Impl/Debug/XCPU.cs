@@ -13,8 +13,7 @@ namespace XeShell.Commands.Impl
                 ? (int)in_command.Inputs[0]
                 : XeConsole.MainThreadID;
 
-            using (var debugger = new XeDebugger(in_console))
-                XeLogger.Log(debugger.GetProcessor(threadID).GetRegisterInfo());
+            XeLogger.Log(new XeDebugger(in_console).GetProcessor(threadID).GetRegisterInfo());
         }
 
         public bool ExecuteRaw(string[] in_args, XeConsole in_console)
