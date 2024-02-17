@@ -1,13 +1,17 @@
 ﻿using XeSharp.Debug;
+using XeSharp.Debug.RTTI;
 using XeSharp.Device;
 using XeSharp.Helpers;
 using XeSharp.Logger;
+using XeShell.Helpers;
 
 namespace XeShell.Commands.Impl
 {
     [Command("peek", Inputs = [ typeof(string) ], OptionalInputs = [ typeof(uint) ])]
     public class Peek : ICommand
     {
+        public static Dictionary<uint, string> RTTICache = [];
+
         public void Execute(List<Command> in_commands, Command in_command, XeConsole in_console)
         {
             var source = (string)in_command.Inputs[0];
@@ -54,6 +58,30 @@ namespace XeShell.Commands.Impl
             }
 
             XeLogger.Log($"Peeking {len} bytes at 0x{addr:X}...\n");
+
+            var rtti = RTTIFactory.GetRuntimeInfoFromClass(in_console, addr);
+
+            if (rtti != null)
+            {
+                var pVftable = in_console.Read<uint>(addr);
+
+                XeLogger.Log($"Object at 0x{addr:X8} is a class with a vftable at 0x{pVftable:X8}.");
+
+                if (RTTICache.TryGetValue(pVftable, out string out_rttiInfo))
+                {
+                    XeLogger.Utility($"\n{out_rttiInfo}");
+                }
+                else
+                {
+                    var info = ConsoleHelper.StatusCommon("Getting runtime type information...",
+                        ctx => rtti.GetClassInfo());
+
+                    RTTICache.Add(pVftable, info);
+
+                    XeLogger.Utility($"\n{info}");
+                }
+            }
+
             MemoryHelper.PrintBytes(result, addr);
         }
 
@@ -62,6 +90,9 @@ namespace XeShell.Commands.Impl
             return false;
         }
 
-        public void Dispose() { }
+        public void Dispose()
+        {
+            RTTICache.Clear();
+        }
     }
 }
