@@ -39,18 +39,18 @@ namespace XeShell.Commands.Impl
             // Get scan pattern.
             switch (param1)
             {
-                case "i8":      pattern = MemoryHelper.StructureToByteArray(MemoryHelper.ChangeType<sbyte>(param2));  break;
-                case "u8":      pattern = MemoryHelper.StructureToByteArray(MemoryHelper.ChangeType<byte>(param2));   break;
-                case "i16":     pattern = MemoryHelper.StructureToByteArray(MemoryHelper.ChangeType<short>(param2));  break;
-                case "u16":     pattern = MemoryHelper.StructureToByteArray(MemoryHelper.ChangeType<ushort>(param2)); break;
-                case "i32":     pattern = MemoryHelper.StructureToByteArray(MemoryHelper.ChangeType<int>(param2));    break;
-                case "u32":     pattern = MemoryHelper.StructureToByteArray(MemoryHelper.ChangeType<uint>(param2));   break;
-                case "i64":     pattern = MemoryHelper.StructureToByteArray(MemoryHelper.ChangeType<long>(param2));   break;
-                case "u64":     pattern = MemoryHelper.StructureToByteArray(MemoryHelper.ChangeType<ulong>(param2));  break;
-                case "f32":     pattern = MemoryHelper.StructureToByteArray(Convert.ToSingle(param2));                break;
-                case "f64":     pattern = MemoryHelper.StructureToByteArray(Convert.ToDouble(param2));                break;
-                case "string":  pattern = Encoding.UTF8.GetBytes(param2);                                             break;
-                case "wstring": pattern = Encoding.BigEndianUnicode.GetBytes(param2);                                 break;
+                case "i8":      pattern = MemoryHelper.UnmanagedTypeToByteArray(MemoryHelper.ChangeType<sbyte>(param2));  break;
+                case "u8":      pattern = MemoryHelper.UnmanagedTypeToByteArray(MemoryHelper.ChangeType<byte>(param2));   break;
+                case "i16":     pattern = MemoryHelper.UnmanagedTypeToByteArray(MemoryHelper.ChangeType<short>(param2));  break;
+                case "u16":     pattern = MemoryHelper.UnmanagedTypeToByteArray(MemoryHelper.ChangeType<ushort>(param2)); break;
+                case "i32":     pattern = MemoryHelper.UnmanagedTypeToByteArray(MemoryHelper.ChangeType<int>(param2));    break;
+                case "u32":     pattern = MemoryHelper.UnmanagedTypeToByteArray(MemoryHelper.ChangeType<uint>(param2));   break;
+                case "i64":     pattern = MemoryHelper.UnmanagedTypeToByteArray(MemoryHelper.ChangeType<long>(param2));   break;
+                case "u64":     pattern = MemoryHelper.UnmanagedTypeToByteArray(MemoryHelper.ChangeType<ulong>(param2));  break;
+                case "f32":     pattern = MemoryHelper.UnmanagedTypeToByteArray(Convert.ToSingle(param2));                break;
+                case "f64":     pattern = MemoryHelper.UnmanagedTypeToByteArray(Convert.ToDouble(param2));                break;
+                case "string":  pattern = Encoding.UTF8.GetBytes(param2);                                                 break;
+                case "wstring": pattern = Encoding.BigEndianUnicode.GetBytes(param2);                                     break;
                 
                 default:
                     pattern = MemoryHelper.HexStringToByteArray(param1.Replace("?", "00"));
