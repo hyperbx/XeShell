@@ -23,13 +23,13 @@ namespace XeShell.Commands.Impl
             var undo = Poke.History[addr][0];
             var len  = (uint)undo.Length;
 
-            in_console.WriteBytes(addr, undo);
+            in_console.Memory.WriteBytes(addr, undo);
 
             XeLogger.Log($"Undone {len} bytes at 0x{addr:X}...\n");
 
             Poke.History[addr].RemoveAt(0);
 
-            MemoryHelper.PrintBytes(in_console.ReadBytes(addr, len), addr);
+            MemoryHelper.PrintBytes(in_console.Memory.ReadBytes(addr, len), addr);
         }
 
         public bool ExecuteRaw(string[] in_args, XeConsole in_console)

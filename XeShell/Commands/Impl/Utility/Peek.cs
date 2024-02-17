@@ -15,6 +15,10 @@ namespace XeShell.Commands.Impl
         public void Execute(List<Command> in_commands, Command in_command, XeConsole in_console)
         {
             var source = (string)in_command.Inputs[0];
+            var sourceDerefs = StringHelper.GetDereferenceCount(source);
+
+            if (sourceDerefs > 0)
+                source = StringHelper.TrimDereferences(source);
 
             var addr = 0U;
             var len = 64U;
@@ -49,7 +53,10 @@ namespace XeShell.Commands.Impl
             if (in_command.Inputs.Count > 1)
                 len = (uint)in_command.Inputs[1];
 
-            var result = in_console.ReadBytes(addr, len);
+            // Dereference this pointer.
+            addr = in_console.Memory.DereferencePointer(addr, sourceDerefs);
+
+            var result = in_console.Memory.ReadBytes(addr, len);
 
             if (result.Length <= 0)
             {
@@ -61,9 +68,10 @@ namespace XeShell.Commands.Impl
 
             var rtti = RTTIFactory.GetRuntimeInfoFromClass(in_console, addr);
 
+            // TODO: handle invalid RTTI responses better, this can sometimes result in a false positive.
             if (rtti != null)
             {
-                var pVftable = in_console.Read<uint>(addr);
+                var pVftable = in_console.Memory.Read<uint>(addr);
 
                 XeLogger.Log($"Object at 0x{addr:X8} is a class with a vftable at 0x{pVftable:X8}.");
 

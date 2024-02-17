@@ -1,9 +1,9 @@
 ﻿using System.Text;
 using XeSharp.Debug;
+using XeSharp.Debug.Processor;
 using XeSharp.Device;
 using XeSharp.Helpers;
 using XeSharp.Logger;
-using XeSharp.Net;
 
 namespace XeShell.Commands.Impl
 {
@@ -15,8 +15,10 @@ namespace XeShell.Commands.Impl
         public void Execute(List<Command> in_commands, Command in_command, XeConsole in_console)
         {
             var source = (string)in_command.Inputs[0];
-            var isRegister = source.ToLower().StartsWith("gpr") ||
-                source.ToLower().StartsWith("fpr");
+            var sourceDerefs = StringHelper.GetDereferenceCount(source);
+
+            if (sourceDerefs > 0)
+                source = StringHelper.TrimDereferences(source);
 
             var addr = 0U;
             var len = 0U;
@@ -24,31 +26,36 @@ namespace XeShell.Commands.Impl
             var param1 = (string)in_command.Inputs[1];
             var param2 = in_command.Inputs.Count > 2 ? (string)in_command.Inputs[2] : null;
 
-            var response = new XeResponse();
-
             // Handle registers.
-            if (isRegister)
+            using (var processor = new XeDebugger(in_console).GetProcessorToken())
             {
-                using var processor = new XeDebugger(in_console).GetProcessorToken();
-
-                if (!processor.TryParseRegisterIndexByName(source, out var out_index))
-                    return;
-
-                if (source.ToLower().StartsWith("gpr"))
+                if (processor.TryParseRegisterByName(source, out var out_type, out var out_index))
                 {
-                    processor.GPR[out_index] = MemoryHelper.ChangeType<ulong>(param1);
-                }
-                else if (source.ToLower().StartsWith("fpr"))
-                {
-                    processor.FPR[out_index] = MemoryHelper.ChangeType<double>(param1);
-                }
+                    // Poke register directly.
+                    if (sourceDerefs <= 0)
+                    {
+                        if (out_type == ERegisterType.GPR)
+                        {
+                            processor.GPR[out_index] = MemoryHelper.ChangeType<ulong>(param1);
+                        }
+                        else if (out_type == ERegisterType.FPR)
+                        {
+                            processor.FPR[out_index] = MemoryHelper.ChangeType<double>(param1);
+                        }
 
-                return;
-            }
-            else
-            {
-                // Assume address.
-                addr = MemoryHelper.ChangeType<uint>(source);
+                        return;
+                    }
+                    else if (out_type == ERegisterType.GPR)
+                    {
+                        // Use "dereferenced" register value.
+                        addr = (uint)processor.GPR[out_index];
+                    }
+                }
+                else
+                {
+                    // Assume address.
+                    addr = MemoryHelper.ChangeType<uint>(source);
+                }
             }
 
             // Used for byte array input.
@@ -77,8 +84,12 @@ namespace XeShell.Commands.Impl
                     break;
             }
 
-            byte[] originalData = len == 0 ? [] : in_console.ReadBytes(addr, len);
+            // Dereference this pointer.
+            addr = in_console.Memory.DereferencePointer(addr, sourceDerefs);
 
+            byte[] originalData = len == 0 ? [] : in_console.Memory.ReadBytes(addr, len);
+
+            // TODO: support registers.
             if (History.ContainsKey(addr))
             {
                 History[addr].Insert(0, originalData);
@@ -89,23 +100,23 @@ namespace XeShell.Commands.Impl
             }
 
             // Write data.
-            switch (param1)
+            var response = param1 switch
             {
-                case "i8":      response = in_console.Write(addr, MemoryHelper.ChangeType<sbyte>(param2));          break;
-                case "u8":      response = in_console.Write(addr, MemoryHelper.ChangeType<byte>(param2));           break;
-                case "i16":     response = in_console.Write(addr, MemoryHelper.ChangeType<short>(param2));          break;
-                case "u16":     response = in_console.Write(addr, MemoryHelper.ChangeType<ushort>(param2));         break;
-                case "i32":     response = in_console.Write(addr, MemoryHelper.ChangeType<int>(param2));            break;
-                case "u32":     response = in_console.Write(addr, MemoryHelper.ChangeType<uint>(param2));           break;
-                case "i64":     response = in_console.Write(addr, MemoryHelper.ChangeType<long>(param2));           break;
-                case "u64":     response = in_console.Write(addr, MemoryHelper.ChangeType<ulong>(param2));          break;
-                case "f32":     response = in_console.Write(addr, MemoryHelper.ChangeType<float>(param2));          break;
-                case "f64":     response = in_console.Write(addr, MemoryHelper.ChangeType<double>(param2));         break;
-                case "nop":     response = in_console.Write(addr, 0x60000000);                                      break;
-                case "string":  response = in_console.WriteBytes(addr, Encoding.UTF8.GetBytes(param2));             break;
-                case "wstring": response = in_console.WriteBytes(addr, Encoding.BigEndianUnicode.GetBytes(param2)); break;
-                default:        response = in_console.WriteBytes(addr, data);                                       break;
-            }
+                "i8"      => in_console.Memory.Write(addr, MemoryHelper.ChangeType<sbyte>(param2)),
+                "u8"      => in_console.Memory.Write(addr, MemoryHelper.ChangeType<byte>(param2)),
+                "i16"     => in_console.Memory.Write(addr, MemoryHelper.ChangeType<short>(param2)),
+                "u16"     => in_console.Memory.Write(addr, MemoryHelper.ChangeType<ushort>(param2)),
+                "i32"     => in_console.Memory.Write(addr, MemoryHelper.ChangeType<int>(param2)),
+                "u32"     => in_console.Memory.Write(addr, MemoryHelper.ChangeType<uint>(param2)),
+                "i64"     => in_console.Memory.Write(addr, MemoryHelper.ChangeType<long>(param2)),
+                "u64"     => in_console.Memory.Write(addr, MemoryHelper.ChangeType<ulong>(param2)),
+                "f32"     => in_console.Memory.Write(addr, MemoryHelper.ChangeType<float>(param2)),
+                "f64"     => in_console.Memory.Write(addr, MemoryHelper.ChangeType<double>(param2)),
+                "nop"     => in_console.Memory.Write(addr, 0x60000000),
+                "string"  => in_console.Memory.WriteBytes(addr, Encoding.UTF8.GetBytes(param2)),
+                "wstring" => in_console.Memory.WriteBytes(addr, Encoding.BigEndianUnicode.GetBytes(param2)),
+                _         => in_console.Memory.WriteBytes(addr, data),
+            };
 
             if (response.Status.IsFailed())
             {
@@ -115,7 +126,7 @@ namespace XeShell.Commands.Impl
 
             XeLogger.Log($"Successfully written {len} bytes to 0x{addr:X}.\n");
 
-            MemoryHelper.PrintBytes(in_console.ReadBytes(addr, len), addr);
+            MemoryHelper.PrintBytes(in_console.Memory.ReadBytes(addr, len), addr);
         }
 
         public bool ExecuteRaw(string[] in_args, XeConsole in_console)

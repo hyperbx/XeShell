@@ -91,7 +91,7 @@ namespace XeShell.Commands.Impl
 
                         try
                         {
-                            return in_console.ReadBytes(currentModule.BaseAddress, total);
+                            return in_console.Memory.ReadBytes(currentModule.BaseAddress, total);
                         }
                         catch (OperationCanceledException) // TODO: move this exception handling to the library?
                         {
@@ -112,7 +112,7 @@ namespace XeShell.Commands.Impl
             //
                 ctx =>
                 {
-                    return in_console.ScanSignature(_memory, pattern, mask, in_isFirstResult: false);
+                    return in_console.Memory.ScanSignature(_memory, pattern, mask, in_isFirstResult: false);
                 }
             );
 
