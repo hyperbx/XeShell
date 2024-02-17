@@ -91,16 +91,16 @@ namespace XeShell.Commands.Impl
             // Write data.
             switch (param1)
             {
-                case "i8":      response = in_console.Write(addr, Convert.ToSByte(param2));                         break;
-                case "u8":      response = in_console.Write(addr, Convert.ToByte(param2));                          break;
-                case "i16":     response = in_console.Write(addr, Convert.ToInt16(param2));                         break;
-                case "u16":     response = in_console.Write(addr, Convert.ToUInt16(param2));                        break;
-                case "i32":     response = in_console.Write(addr, Convert.ToInt32(param2));                         break;
-                case "u32":     response = in_console.Write(addr, Convert.ToUInt32(param2));                        break;
-                case "i64":     response = in_console.Write(addr, Convert.ToInt64(param2));                         break;
-                case "u64":     response = in_console.Write(addr, Convert.ToUInt64(param2));                        break;
-                case "f32":     response = in_console.Write(addr, Convert.ToSingle(param2));                        break;
-                case "f64":     response = in_console.Write(addr, Convert.ToDouble(param2));                        break;
+                case "i8":      response = in_console.Write(addr, MemoryHelper.ChangeType<sbyte>(param2));          break;
+                case "u8":      response = in_console.Write(addr, MemoryHelper.ChangeType<byte>(param2));           break;
+                case "i16":     response = in_console.Write(addr, MemoryHelper.ChangeType<short>(param2));          break;
+                case "u16":     response = in_console.Write(addr, MemoryHelper.ChangeType<ushort>(param2));         break;
+                case "i32":     response = in_console.Write(addr, MemoryHelper.ChangeType<int>(param2));            break;
+                case "u32":     response = in_console.Write(addr, MemoryHelper.ChangeType<uint>(param2));           break;
+                case "i64":     response = in_console.Write(addr, MemoryHelper.ChangeType<long>(param2));           break;
+                case "u64":     response = in_console.Write(addr, MemoryHelper.ChangeType<ulong>(param2));          break;
+                case "f32":     response = in_console.Write(addr, MemoryHelper.ChangeType<float>(param2));          break;
+                case "f64":     response = in_console.Write(addr, MemoryHelper.ChangeType<double>(param2));         break;
                 case "nop":     response = in_console.Write(addr, 0x60000000);                                      break;
                 case "string":  response = in_console.WriteBytes(addr, Encoding.UTF8.GetBytes(param2));             break;
                 case "wstring": response = in_console.WriteBytes(addr, Encoding.BigEndianUnicode.GetBytes(param2)); break;
