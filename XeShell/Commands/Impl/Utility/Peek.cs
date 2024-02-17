@@ -68,7 +68,6 @@ namespace XeShell.Commands.Impl
 
             var rtti = RTTIFactory.GetRuntimeInfoFromClass(in_console, addr);
 
-            // TODO: handle invalid RTTI responses better, this can sometimes result in a false positive.
             if (rtti != null)
             {
                 var pVftable = in_console.Memory.Read<uint>(addr);
