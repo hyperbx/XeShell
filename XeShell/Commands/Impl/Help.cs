@@ -65,7 +65,7 @@ namespace XeShell.Commands.Impl
 
         private Dictionary<string, (string Description, string Usage, string Deprecated)> _xeShellDefinitions = new()
         {
-            { "analyse/analyze", ("analyses the memory location for RTTI.", "analyse [address/register]", "") },
+            { "analyse/analyze", ("analyses a memory address containing a class for RTTI.", "analyse [address/register]", "") },
             { "attach",          ("attaches the debugger to the console.", "", "") },
             { "cd/cd..",         ("changes to the specified directory.", "cd [path]\nDrives can be changed into without invoking the command.", "") },
             { "cls/clear",       ("clears the command prompt.", "", "") },

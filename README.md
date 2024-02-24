@@ -23,7 +23,7 @@ A command prompt that interfaces with XBDM on a remote Xbox 360.
 
 Command|Alias|Description
 -------|-----|-----------
-`analyse`|`analyze`|Analyses the memory location for RTTI.
+`analyse`|`analyze`|Analyses a memory address containing a class for RTTI.
 `attach`||Attaches the debugger to the console.
 `cd`|`cd..`|Changes to the specified directory.
 `cls`|`clear`|Clears the command prompt.
