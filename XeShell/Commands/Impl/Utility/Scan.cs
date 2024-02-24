@@ -1,7 +1,5 @@
-﻿using Spectre.Console;
-using System.Text;
+﻿using System.Text;
 using XeSharp.Device;
-using XeSharp.Device.Title;
 using XeSharp.Helpers;
 using XeSharp.Logger;
 using XeShell.Helpers;
@@ -11,9 +9,6 @@ namespace XeShell.Commands.Impl
     [Command("scan", Inputs = [ typeof(string) ], OptionalInputs = [ typeof(string), typeof(string) ])]
     public class Scan : ICommand
     {
-        private static XeModuleInfo _lastScannedModule;
-        private static byte[] _memory;
-
         public void Execute(List<Command> in_commands, Command in_command, XeConsole in_console)
         {
             var modules = in_console.GetModules();
@@ -62,63 +57,14 @@ namespace XeShell.Commands.Impl
             if (string.IsNullOrEmpty(mask))
                 mask = new string('x', pattern.Length);
 
-            bool isUseCachedMemory = false;
-
-            if (currentModule.Equals(_lastScannedModule))
-            {
-                if (_memory.Length > 0 && AnsiConsole.Confirm("Use cached memory?"))
-                    isUseCachedMemory = true;
-            }
-
-            if (!isUseCachedMemory)
-            {
-                _memory = ConsoleHelper.ProgressCommon
-                (
-                    ctx =>
-                    {
-                        var task = ctx.AddTask("Downloading title image...");
-                        var total = currentModule.ImageSize;
-
-                        in_console.Client.ReadEvent += (s, e) =>
-                        {
-                            task.Description(
-                                $"Downloading title image... " +
-                                $"({FormatHelper.ByteLengthToDecimalString(e.BytesRead / 2)} / {FormatHelper.ByteLengthToDecimalString(total)})");
-
-                            task.MaxValue(total);
-                            task.Value(e.BytesRead / 2);
-                        };
-
-                        try
-                        {
-                            return in_console.Memory.ReadBytes(currentModule.BaseAddress, total);
-                        }
-                        catch (OperationCanceledException) // TODO: move this exception handling to the library?
-                        {
-                            in_console.Client.Flush();
-                            return [];
-                        }
-                    }
-                );
-            }
-
-            if (_memory.Length <= 0)
-            {
-                XeLogger.Error("Failed to download title image...");
-                return;
-            }
-
+            // TODO: display progress.
             var results = ConsoleHelper.StatusCommon($"Scanning for \"{(isByteInput ? param1 : MemoryHelper.ByteArrayToHexString(pattern))}\"...",
             //
                 ctx =>
                 {
-                    return in_console.Memory.ScanSignature(_memory, pattern, mask, in_isFirstResult: false);
+                    return in_console.Memory.ScanSignature(pattern, mask, in_isFirstResult: false);
                 }
             );
-
-            _lastScannedModule = param3 == null
-                ? modules.Last().Value
-                : modules[param3];
 
             if (results.Count <= 0)
             {
@@ -137,10 +83,6 @@ namespace XeShell.Commands.Impl
             return false;
         }
 
-        public void Dispose()
-        {
-            _lastScannedModule = null;
-            _memory = null;
-        }
+        public void Dispose() { }
     }
 }

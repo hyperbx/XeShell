@@ -20,6 +20,11 @@ namespace XeShell.Services
         public static int HistoryIndex { get; set; } = -1;
 
         /// <summary>
+        /// Determines whether history will be used in this session.
+        /// </summary>
+        public bool IsHistorySaved { get; set; } = true;
+
+        /// <summary>
         /// The user input displayed to the console.
         /// </summary>
         public StringBuilder Input { get; set; } = new();
@@ -216,7 +221,7 @@ namespace XeShell.Services
 
             var result = Input.ToString();
 
-            if (!result.IsNullOrEmptyOrWhiteSpace())
+            if (IsHistorySaved && !result.IsNullOrEmptyOrWhiteSpace())
             {
                 History.Add(result);
                 HistoryIndex = History.Count;

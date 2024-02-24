@@ -65,26 +65,27 @@ namespace XeShell.Commands.Impl
 
         private Dictionary<string, (string Description, string Usage, string Deprecated)> _xeShellDefinitions = new()
         {
-            { "attach",         ("attaches the debugger to the console.", "", "") },
-            { "cd/cd..",        ("changes to the specified directory.", "cd [path]\nDrives can be changed into without invoking the command.", "") },
-            { "cls/clear",      ("clears the command prompt.", "", "") },
-            { "del/rm",         ("deletes a remote file or directory.", "del [remote path]", "") },
-            { "detach",         ("detaches the debugger from the console.", "", "") },
-            { "dir/ls",         ("lists the current or specified directory's contents.", "dir [opt: path]", "") },
-            { "download/dl",    ("downloads a remote file.", "download [remote source] [local destination]", "") },
-            { "exit",           ("exits the command prompt.", "", "") },
-            { "help/?",         ("displays help information.", "", "") },
-            { "info/info.",     ("displays information about the connected console or specified filesystem node.", "info [opt: file/directory]", "") },
-            { "launch",         ("launches the specified executable binary.", "launch [path]\n*.xex files can be invoked directly by name.", "") },
-            { "mkdir",          ("creates a remote directory.", "mkdir [path]", "") },
-            { "peek",           ("reads data from a memory address and prints it.", "peek [address/register] [opt: amount]", "") },
-            { "peekfile/peekf", ("reads data from a file and prints it.", "peekfile [path] [opt: amount]", "") },
-            { "poke",           ("writes data to a virtual address.", "poke [address/register] [opt: i8/u8/i16/u16/i32/u32/i64/u64/nop/string/wstring] [data]", "") },
-            { "scan",           ("scans memory for data.", "scan [opt: i8/u8/i16/u16/i32/u32/i64/u64/string/wstring] [data] [opt: module name]", "") },
-            { "step",           ("steps to the next instruction from the current breakpoint.", "step [opt: thread ID]", "") },
-            { "undo",           ("undoes memory changes via the poke command (only works per session).", "undo [opt: address]", "") },
-            { "upload/ul",      ("uploads a local file.", "upload [local source] [remote destination]", "") },
-            { "xcpu",           ("dumps the current CPU state.", "xcpu [opt: thread ID]", "") }
+            { "analyse/analyze", ("analyses the memory location for RTTI.", "analyse [address/register]", "") },
+            { "attach",          ("attaches the debugger to the console.", "", "") },
+            { "cd/cd..",         ("changes to the specified directory.", "cd [path]\nDrives can be changed into without invoking the command.", "") },
+            { "cls/clear",       ("clears the command prompt.", "", "") },
+            { "del/rm",          ("deletes a remote file or directory.", "del [remote path]", "") },
+            { "detach",          ("detaches the debugger from the console.", "", "") },
+            { "dir/ls",          ("lists the current or specified directory's contents.", "dir [opt: path]", "") },
+            { "download/dl",     ("downloads a remote file.", "download [remote source] [local destination]", "") },
+            { "exit",            ("exits the command prompt.", "", "") },
+            { "help/?",          ("displays help information.", "", "") },
+            { "info/info.",      ("displays information about the connected console or specified filesystem node.", "info [opt: file/directory]", "") },
+            { "launch",          ("launches the specified executable binary.", "launch [path]\n*.xex files can be invoked directly by name.", "") },
+            { "mkdir",           ("creates a remote directory.", "mkdir [path]", "") },
+            { "peek",            ("reads data from a memory address and prints it.", "peek [address/register] [opt: amount]", "") },
+            { "peekfile/peekf",  ("reads data from a file and prints it.", "peekfile [path] [opt: amount]", "") },
+            { "poke",            ("writes data to a virtual address.", "poke [address/register] [opt: i8/u8/i16/u16/i32/u32/i64/u64/nop/string/wstring] [data]", "") },
+            { "scan",            ("scans memory for data.", "scan [opt: i8/u8/i16/u16/i32/u32/i64/u64/string/wstring] [data] [opt: module name]", "") },
+            { "step",            ("steps to the next instruction from the current breakpoint.", "step [opt: thread ID]", "") },
+            { "undo",            ("undoes memory changes via the poke command (only works per session).", "undo [opt: address]", "") },
+            { "upload/ul",       ("uploads a local file.", "upload [local source] [remote destination]", "") },
+            { "xcpu",            ("dumps the current CPU state.", "xcpu [opt: thread ID]", "") }
         };
 
         private Dictionary<string, (string Description, string Usage, string Deprecated)> _xbdmDefinitions = new()

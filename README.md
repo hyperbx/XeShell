@@ -7,7 +7,7 @@ A command prompt that interfaces with XBDM on a remote Xbox 360.
 - Peeking and poking memory.
 - Peeking file data.
 - Signature scanning.
-- Debugging.
+- Debugging and analysis.
 
 # Prerequisites
 ### Building
@@ -23,6 +23,7 @@ A command prompt that interfaces with XBDM on a remote Xbox 360.
 
 Command|Alias|Description
 -------|-----|-----------
+`analyse`|`analyze`|Analyses the memory location for RTTI.
 `attach`||Attaches the debugger to the console.
 `cd`|`cd..`|Changes to the specified directory.
 `cls`|`clear`|Clears the command prompt.
