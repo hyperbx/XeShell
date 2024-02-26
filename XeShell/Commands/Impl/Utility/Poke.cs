@@ -58,6 +58,9 @@ namespace XeShell.Commands.Impl
                 }
             }
 
+            // Dereference this pointer.
+            addr = in_console.Memory.DereferencePointer(addr, sourceDerefs);
+
             // Used for byte array input.
             byte[] data = [];
 
@@ -83,9 +86,6 @@ namespace XeShell.Commands.Impl
                     len = (uint)data.Length;
                     break;
             }
-
-            // Dereference this pointer.
-            addr = in_console.Memory.DereferencePointer(addr, sourceDerefs);
 
             byte[] originalData = len == 0 ? [] : in_console.Memory.ReadBytes(addr, len);
 
