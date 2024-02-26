@@ -124,7 +124,7 @@ namespace XeShell.Commands.Impl
                 return;
             }
 
-            XeLogger.Log($"Successfully written {len} bytes to 0x{addr:X}.\n");
+            XeLogger.Log($"Successfully written {len} bytes to 0x{addr:X8}.\n");
 
             MemoryHelper.PrintBytes(in_console.Memory.ReadBytes(addr, len), addr);
         }

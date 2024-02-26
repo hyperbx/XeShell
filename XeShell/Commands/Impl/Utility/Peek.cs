@@ -21,7 +21,7 @@ namespace XeShell.Commands.Impl
                 return;
             }
 
-            var len = in_command.Inputs.Count > 1 ? (uint)in_command.Inputs[0] : 64U;
+            var len = in_command.Inputs.Count > 1 ? (uint)in_command.Inputs[1] : 64U;
 
             XeLogger.Log($"Peeking {len} bytes from 0x{out_addr:X8}...\n");
 
