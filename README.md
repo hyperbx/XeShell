@@ -45,6 +45,7 @@ Command|Alias|Description
 `step`||Steps to the next instruction from the current breakpoint.
 `undo`||Undoes memory changes via the `poke` command (only works per session).
 `upload`|`ul`|Uploads a file.
+`xbdm`||Sends a command to XBDM, bypassing XeShell overrides.
 `xcpu`||Dumps the current CPU state.
 
 ***See the `help` command for additional information.***

@@ -87,6 +87,7 @@ namespace XeShell.Commands.Impl
             { "step",            ("steps to the next instruction from the current breakpoint.", "step [opt: thread ID]", "") },
             { "undo",            ("undoes memory changes via the poke command (only works per session).", "undo [opt: address]", "") },
             { "upload/ul",       ("uploads a local file.", "upload [local source] [remote destination]", "") },
+            { "xbdm",            ("sends a command to XBDM, bypassing XeShell overrides.", "xbdm [command]", "") },
             { "xcpu",            ("dumps the current CPU state.", "xcpu [opt: thread ID]", "") }
         };
 
