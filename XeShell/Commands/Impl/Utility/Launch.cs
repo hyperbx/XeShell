@@ -10,7 +10,7 @@ namespace XeShell.Commands.Impl
             in_console.Launch((string)in_command.Inputs[0], string.Join(' ', in_command.Inputs.Skip(1)));
         }
 
-        public bool ExecuteRaw(string[] in_args, XeConsole in_console)
+        public bool ExecuteRaw(string[] in_args, string in_command, XeConsole in_console)
         {
             if (in_args.Length <= 0)
                 return false;

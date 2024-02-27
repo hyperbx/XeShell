@@ -29,7 +29,7 @@ namespace XeShell.Commands.Impl
             MemoryHelper.PrintBytes(data.Take((int)len).ToArray());
         }
 
-        public bool ExecuteRaw(string[] in_args, XeConsole in_console)
+        public bool ExecuteRaw(string[] in_args, string in_command, XeConsole in_console)
         {
             return false;
         }

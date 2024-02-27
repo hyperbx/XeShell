@@ -19,7 +19,7 @@ namespace XeShell.Commands.Impl
             XeLogger.Error("The system cannot find the path specified.");
         }
 
-        public bool ExecuteRaw(string[] in_args, XeConsole in_console)
+        public bool ExecuteRaw(string[] in_args, string in_command, XeConsole in_console)
         {
             if (in_args.Length <= 0 || !in_args[0].EndsWith(':'))
                 return false;

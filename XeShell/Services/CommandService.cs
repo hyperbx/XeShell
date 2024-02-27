@@ -10,7 +10,7 @@ namespace XeShell.Services
     {
         protected XeConsole _console = in_console;
 
-        private static List<string> _exitCommands =
+        private static readonly List<string> _exitCommands =
         [
             "bye",
             "magicboot cold",

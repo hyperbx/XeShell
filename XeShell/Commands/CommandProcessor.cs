@@ -120,7 +120,7 @@ namespace XeShell.Commands
 
             foreach (var command in Commands)
             {
-                if ((Activator.CreateInstance(command.Value) as ICommand)?.ExecuteRaw(args, in_console) == true)
+                if ((Activator.CreateInstance(command.Value) as ICommand)?.ExecuteRaw(args, in_args, in_console) == true)
                     result = true;
             }
 

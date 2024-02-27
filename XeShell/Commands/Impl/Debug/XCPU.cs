@@ -16,7 +16,7 @@ namespace XeShell.Commands.Impl
             XeLogger.Log(new XeDebugger(in_console).GetProcessor(threadID).GetRegisterInfo());
         }
 
-        public bool ExecuteRaw(string[] in_args, XeConsole in_console)
+        public bool ExecuteRaw(string[] in_args, string in_command, XeConsole in_console)
         {
             return false;
         }

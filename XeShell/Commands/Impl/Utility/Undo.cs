@@ -32,7 +32,7 @@ namespace XeShell.Commands.Impl
             MemoryHelper.PrintBytes(in_console.Memory.ReadBytes(addr, len), addr);
         }
 
-        public bool ExecuteRaw(string[] in_args, XeConsole in_console)
+        public bool ExecuteRaw(string[] in_args, string in_command, XeConsole in_console)
         {
             return false;
         }

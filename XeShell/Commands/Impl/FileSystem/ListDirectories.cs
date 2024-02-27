@@ -66,7 +66,7 @@ namespace XeShell.Commands.Impl
             XeLogger.Log($"\t       {dirCount} Dir(s)" + (drive == null ? "" : $" {string.Format("{0,16}", drive.FreeSpace.ToString("N0"))} bytes free"));
         }
 
-        public bool ExecuteRaw(string[] in_args, XeConsole in_console)
+        public bool ExecuteRaw(string[] in_args, string in_command, XeConsole in_console)
         {
             return false;
         }
