@@ -25,11 +25,9 @@ Command|Alias|Description
 -------|-----|-----------
 `analyse`|`analyze`|Analyses a memory address containing a class for RTTI.
 `asm`||Assembles PowerPC instructions to bytecode at the specified memory address.
-`attach`||Attaches the debugger to the console.
 `cd`|`cd..`|Changes to the specified directory.
 `cls`|`clear`|Clears the command prompt.
 `del`|`rm`|Deletes a remote file or directory.
-`detach`||Detaches the debugger from the console.
 `dir`|`ls`|Lists the current or specified directory's contents.
 `disasm`||Disassembles PowerPC instructions at the specified memory address.
 `download`|`dl`|Downloads a remote file.
