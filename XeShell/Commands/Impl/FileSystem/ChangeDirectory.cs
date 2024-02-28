@@ -19,17 +19,17 @@ namespace XeShell.Commands.Impl
             XeLogger.Error("The system cannot find the path specified.");
         }
 
-        public bool ExecuteRaw(string[] in_args, string in_command, XeConsole in_console)
+        public ECommandResponse ExecuteRaw(string[] in_args, string in_command, XeConsole in_console)
         {
             if (in_args.Length <= 0 || !in_args[0].EndsWith(':'))
-                return false;
+                return ECommandResponse.Error;
 
             if (!in_console.FileSystem.GetDrives(in_isRecursiveNodes: false).Any(x => x.Name.ToLower() == in_args[0].ToLower()))
-                return false;
+                return ECommandResponse.Error;
 
             in_console.FileSystem.ChangeDirectory(in_args[0]);
 
-            return true;
+            return ECommandResponse.Success;
         }
 
         public void Dispose() { }

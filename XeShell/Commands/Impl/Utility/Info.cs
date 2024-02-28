@@ -28,9 +28,9 @@ namespace XeShell.Commands.Impl
             XeLogger.Log(node.GetInfo());
         }
 
-        public bool ExecuteRaw(string[] in_args, string in_command, XeConsole in_console)
+        public ECommandResponse ExecuteRaw(string[] in_args, string in_command, XeConsole in_console)
         {
-            return false;
+            return ECommandResponse.Error;
         }
 
         public void Dispose() { }

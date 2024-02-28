@@ -56,9 +56,9 @@ namespace XeShell.Commands.Impl
                 PrintDefinitions("Freeboot XBDM commands", _freebootXbdmDefinitions);
         }
 
-        public bool ExecuteRaw(string[] in_args, string in_command, XeConsole in_console)
+        public ECommandResponse ExecuteRaw(string[] in_args, string in_command, XeConsole in_console)
         {
-            return false;
+            return ECommandResponse.Error;
         }
 
         public void Dispose() { }
@@ -67,11 +67,9 @@ namespace XeShell.Commands.Impl
         {
             { "analyse/analyze", ("analyses a memory address containing a class for RTTI.", "analyse [address/register]", "") },
             { "asm",             ("assembles PowerPC instructions to bytecode at the specified memory address.", "asm [address/register] [asm]", "") },
-            { "attach",          ("attaches the debugger to the console.", "", "") },
             { "cd/cd..",         ("changes to the specified directory.", "cd [path]\nDrives can be changed into without invoking the command.", "") },
             { "cls/clear",       ("clears the command prompt.", "", "") },
             { "del/rm",          ("deletes a remote file or directory.", "del [remote path]", "") },
-            { "detach",          ("detaches the debugger from the console.", "", "") },
             { "dir/ls",          ("lists the current or specified directory's contents.", "dir [opt: path]", "") },
             { "disasm",          ("disassembles PowerPC instructions at the specified memory address.", "disasm [address/register] [opt: amount]", "") },
             { "download/dl",     ("downloads a remote file.", "download [remote source] [local destination]", "") },

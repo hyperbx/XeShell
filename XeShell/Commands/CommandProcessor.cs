@@ -120,8 +120,17 @@ namespace XeShell.Commands
 
             foreach (var command in Commands)
             {
-                if ((Activator.CreateInstance(command.Value) as ICommand)?.ExecuteRaw(args, in_args, in_console) == true)
-                    result = true;
+                var response = (Activator.CreateInstance(command.Value) as ICommand)?.ExecuteRaw(args, in_args, in_console);
+
+                switch (response)
+                {
+                    case ECommandResponse.Success:
+                        result = true;
+                        break;
+
+                    case ECommandResponse.RerouteToBase:
+                        return false;
+                }
             }
 
             if (commands.Count <= 0)
