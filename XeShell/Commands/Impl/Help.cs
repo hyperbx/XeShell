@@ -98,7 +98,7 @@ namespace XeShell.Commands.Impl
             { "consoletype",       ("gets the console type.", "", "use the info command.") },
             { "continue",          ("continues a thread.", "continue thread=[id]", "") },
             { "dbgname",           ("gets the console name.", "", "use the info command.") },
-            { "debugger",          ("signals that a debugger has been attached or detached.", "", "use the attach and detach commands.") },
+            { "debugger",          ("signals that a debugger has been attached or detached.", "", "the break command will automatically attach a debugger.") },
             { "delete",            ("deletes a file or directory.", "delete name=[path] [opt: dir]", "use the del command.") },
             { "dirlist",           ("gets a list of items in a folder.", "dirlist name=[path]", "use the dir command.") },
             { "dmversion",         ("gets the debugger version.", "", "use the info command.") },
