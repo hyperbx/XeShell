@@ -1,6 +1,5 @@
 ﻿using Spectre.Console;
 using XeSharp.Device;
-using XeSharp.Helpers;
 using XeShell.Helpers;
 
 namespace XeShell.Commands.Impl
@@ -18,7 +17,7 @@ namespace XeShell.Commands.Impl
             var fileCount = node.GetTotalNodes(true, false);
             var fileIndex = 0;
 
-            var status = "Downloading file" + (fileCount == 0 ? "..." : "s...") + " ";
+            var status = "Downloading... ";
 
             ConsoleHelper.ProgressCommon
             (
@@ -36,7 +35,7 @@ namespace XeShell.Commands.Impl
 
                         task.Description(
                             $"{status}" + (fileCount == 0 ? "" : $"({fileIndex} / {fileCount}) ") +
-                            $"({FormatHelper.ByteLengthToDecimalString(e.BytesRead)} / {FormatHelper.ByteLengthToDecimalString(e.BytesTotal)})");
+                            $"({e.BytesReadFormatted} / {e.BytesTotalFormatted})");
 
                         task.MaxValue(e.BytesTotal);
                         task.Value(e.BytesRead);
