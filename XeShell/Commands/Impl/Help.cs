@@ -72,7 +72,7 @@ namespace XeShell.Commands.Impl
             { "del/rm",          ("deletes a remote file or directory.", "del [remote path]", "") },
             { "dir/ls",          ("lists the current or specified directory's contents.", "dir [opt: path]", "") },
             { "disasm",          ("disassembles PowerPC instructions at the specified memory address.", "disasm [address/register] [opt: amount]", "") },
-            { "download/dl",     ("downloads a remote file.", "download [remote source] [local destination]", "") },
+            { "download/dl",     ("downloads a remote file or directory.", "download [remote source] [local destination]", "") },
             { "exit",            ("exits the command prompt.", "", "") },
             { "help/?",          ("displays help information.", "", "") },
             { "info/info.",      ("displays information about the connected console or specified filesystem node.", "info [opt: file/directory]", "") },
@@ -84,7 +84,7 @@ namespace XeShell.Commands.Impl
             { "scan",            ("scans memory for data.", "scan [opt: i8/u8/i16/u16/i32/u32/i64/u64/string/wstring] [data] [opt: module name]", "") },
             { "step",            ("steps to the next instruction from the current breakpoint.", "step [opt: thread ID]", "") },
             { "undo",            ("undoes memory changes via the poke command (only works per session).", "undo [opt: address]", "") },
-            { "upload/ul",       ("uploads a local file.", "upload [local source] [remote destination]", "") },
+            { "upload/ul",       ("uploads a local file or directory.", "upload [local source] [remote destination]", "") },
             { "xbdm",            ("sends a command to XBDM, bypassing XeShell overrides.", "xbdm [command]", "") },
             { "xcpu",            ("dumps the current CPU state.", "xcpu [opt: thread ID]", "") }
         };

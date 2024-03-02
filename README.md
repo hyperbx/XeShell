@@ -30,7 +30,7 @@ Command|Alias|Description
 `del`|`rm`|Deletes a remote file or directory.
 `dir`|`ls`|Lists the current or specified directory's contents.
 `disasm`||Disassembles PowerPC instructions at the specified memory address.
-`download`|`dl`|Downloads a remote file.
+`download`|`dl`|Downloads a remote file or directory.
 `exit`||Exits the command prompt.
 `help`|`?`|Displays help information.
 `info`|`info.`|Displays information about the connected console or specified filesystem node.
@@ -42,7 +42,7 @@ Command|Alias|Description
 `scan`||Scans memory for data.
 `step`||Steps to the next instruction from the current breakpoint.
 `undo`||Undoes memory changes via the `poke` command (only works per session).
-`upload`|`ul`|Uploads a file.
+`upload`|`ul`|Uploads a local file or directory.
 `xbdm`||Sends a command to XBDM, bypassing XeShell overrides.
 `xcpu`||Dumps the current CPU state.
 
