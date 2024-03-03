@@ -86,7 +86,7 @@ namespace XeShell.Commands.Impl
             { "undo",            ("undoes memory changes via the poke command (only works per session).", "undo [opt: address]", "") },
             { "upload/ul",       ("uploads a local file or directory.", "upload [local source] [remote destination]", "") },
             { "xbdm",            ("sends a command to XBDM, bypassing XeShell overrides.", "xbdm [command]", "") },
-            { "xcpu",            ("dumps the current CPU state.", "xcpu [opt: thread ID]", "") }
+            { "xcpu",            ("dumps the current CPU state.", "xcpu [opt: MSR/IAR/LR/CTR/GPR/CR/XER/FPSCR/FPR/VSCR/VR/General/Special/All] [opt: thread ID]", "") }
         };
 
         private Dictionary<string, (string Description, string Usage, string Deprecated)> _xbdmDefinitions = new()
