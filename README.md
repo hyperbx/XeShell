@@ -38,7 +38,7 @@ Command|Alias|Description
 `mkdir`||Creates a remote directory.
 `peek`||Reads data from a memory address and prints it.
 `peekfile`|`peekf`|Reads data from a file and prints it.
-`poke`||Writes data to a virtual address.
+`poke`||Writes data to a memory address.
 `scan`||Scans memory for data.
 `step`||Steps to the next instruction from the current breakpoint.
 `undo`||Undoes memory changes via the `poke` command (only works per session).
